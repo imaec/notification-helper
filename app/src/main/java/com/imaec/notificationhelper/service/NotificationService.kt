@@ -14,9 +14,10 @@ import com.imaec.notificationhelper.model.ContentRO
 import com.imaec.notificationhelper.model.NotificationData
 import com.imaec.notificationhelper.model.NotificationRO
 import io.realm.Realm
+import java.io.ByteArrayOutputStream
 
 @SuppressLint("OverrideAbstract")
-class MyNotificationService : NotificationListenerService() {
+class NotificationHelperService : NotificationListenerService() {
 
     override fun onListenerConnected() {
         super.onListenerConnected()
@@ -33,16 +34,30 @@ class MyNotificationService : NotificationListenerService() {
         val title = bundle.getString(Notification.EXTRA_TITLE) ?: return
         val content = bundle.getString(Notification.EXTRA_TEXT)
         val bitmap = bundle.get(Notification.EXTRA_LARGE_ICON) as Bitmap?
+        var bitmap2: Bitmap? = null
+
+        sbn.notification.extras.getBundle("android.wearable.EXTENSIONS")?.let {
+            for (key in it.keySet()) {
+                it.get(key)?.let { obj ->
+                    Log.d("key :::: ", obj.toString())
+                    Log.d("obj :::: ", obj.toString())
+                    if (key.toString() == "background") {
+                        bitmap2 = obj as Bitmap
+                    }
+                }
+            }
+        }
 
         val data = NotificationData().apply {
             this.packageName = sbn.packageName
-            this.appName = Utils.getAppName(this@MyNotificationService, sbn.packageName)
+            this.appName = Utils.getAppName(this@NotificationHelperService, sbn.packageName)
             this.saveTime = System.currentTimeMillis()
             this.content = ContentData().apply {
                 this.pKey = System.currentTimeMillis()
                 this.title = title
                 this.content = content ?: ""
                 this.img = Utils.getByteArray(bitmap)
+                this.img2 = Utils.getByteArray(bitmap2)
             }
         }
         saveRealm(data)
@@ -65,6 +80,7 @@ class MyNotificationService : NotificationListenerService() {
                         title = data.content.title
                         content = data.content.content
                         img = data.content.img
+                        img2 = data.content.img2
                     })
                     Log.d("write :::: ", "notification, content")
                 }
@@ -76,6 +92,7 @@ class MyNotificationService : NotificationListenerService() {
                     title = data.content.title
                     content = data.content.content
                     img = data.content.img
+                    img2 = data.content.img2
                 })
                 Log.d("write :::: ", "content")
             }

@@ -8,4 +8,5 @@ class ContentData : Serializable {
     var title: String = ""
     var content: String = ""
     var img: ByteArray? = null
+    var img2: ByteArray? = null
 }
