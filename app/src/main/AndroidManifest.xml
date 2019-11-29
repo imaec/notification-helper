@@ -21,8 +21,6 @@
 
         <activity android:name=".activity.DetailActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".activity.SettingActivity"
-            android:screenOrientation="portrait"/>
         <activity android:name=".activity.ImageActivity"
             android:screenOrientation="portrait"/>
 

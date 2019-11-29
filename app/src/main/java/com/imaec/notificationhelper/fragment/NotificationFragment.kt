@@ -1,6 +1,7 @@
 package com.imaec.notificationhelper.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.imaec.notificationhelper.R
 import com.imaec.notificationhelper.adapter.NotificationAdapter
+import com.imaec.notificationhelper.model.IgnoreRO
 import com.imaec.notificationhelper.model.NotificationRO
 import io.realm.Realm
 import io.realm.Sort
@@ -52,8 +54,13 @@ class NotificationFragment : Fragment() {
 
         adapter.clearItem()
         realmResult.forEach {
-            linearNotificationEmpty.visibility = View.GONE
-            adapter.addItem(it)
+            val ignore = realm.where(IgnoreRO::class.java)
+                .equalTo("packageName", it.packageName)
+                .findFirst()
+            if (ignore == null) {
+                linearNotificationEmpty.visibility = View.GONE
+                adapter.addItem(it)
+            }
         }
         adapter.notifyDataSetChanged()
     }

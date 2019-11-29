@@ -5,14 +5,16 @@ import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.util.remove
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.imaec.notificationhelper.R
+import com.imaec.notificationhelper.fragment.SettingFragment
 import com.imaec.notificationhelper.model.AppData
+import com.imaec.notificationhelper.model.IgnoreRO
+import io.realm.RealmResults
 import kotlinx.android.synthetic.main.item_app.view.*
 
-class AppAdapter(val glide: RequestManager) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AppAdapter(val glide: RequestManager, val callback: SettingFragment.IgnoreCallback) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var context: Context
 
@@ -58,6 +60,8 @@ class AppAdapter(val glide: RequestManager) : RecyclerView.Adapter<RecyclerView.
                 else selectedItems.put(position, true)
 
                 notifyItemChanged(position)
+
+                callback.onIgnore(position, selectedItems.get(position))
             }
         }
     }
@@ -74,13 +78,17 @@ class AppAdapter(val glide: RequestManager) : RecyclerView.Adapter<RecyclerView.
         }
     }
 
-    fun setSelectedItems(listSelectedItems: ArrayList<Int>) {
-        for (selectedItem in listSelectedItems) {
-            this.selectedItems.put(selectedItem, true)
+    fun setSelectedItems(listSelectedItems: RealmResults<IgnoreRO>) {
+        listItem.forEach { app ->
+            listSelectedItems.forEach {
+                if (app.packageName == it.packageName) {
+                    selectedItems.put(listItem.indexOf(app), true)
+                }
+            }
         }
     }
 
-    fun getSelectedItem() : SparseBooleanArray {
-        return selectedItems
+    fun getItem(): ArrayList<AppData> {
+        return listItem
     }
 }
