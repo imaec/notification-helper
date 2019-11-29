@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="@android:color/white"
+        android:background="?android:attr/windowBackground"
         app:labelVisibilityMode="labeled"
         app:itemTextColor="@color/color_bottom_text"
         app:itemBackground="@drawable/bg_bottom"

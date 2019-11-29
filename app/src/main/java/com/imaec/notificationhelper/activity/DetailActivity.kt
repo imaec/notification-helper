@@ -55,6 +55,7 @@ class DetailActivity : AppCompatActivity() {
     private fun getData() {
         if (listItem.size == 0) {
             val packageName = intent.getStringExtra("packageName")
+            adapter.setPackageName(packageName)
             val realmResult = realm.where(NotificationRO::class.java)
                 .equalTo("packageName", packageName)
                 .findFirst()

@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NotificationManagerCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.imaec.notificationhelper.ACTION_NOTIFICATION
 import com.imaec.notificationhelper.R
@@ -28,6 +29,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var fragmentSetting: SettingFragment
 
     private var notificationReceiver: BroadcastReceiver? = null
+    private val itemIds = listOf(R.id.navigation_notification, R.id.navigation_search, R.id.navigation_more)
+    private val icons = listOf(R.mipmap.ic_notification_list, R.mipmap.ic_search, R.mipmap.ic_more)
+    private val icons2 = listOf(R.mipmap.ic_notification_list, R.mipmap.ic_search, R.mipmap.ic_more)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,16 +41,18 @@ class MainActivity : AppCompatActivity() {
 
         bottomMain.setOnNavigationItemSelectedListener {
             transaction = supportFragmentManager.beginTransaction()
-
             when (it.itemId) {
                 R.id.navigation_notification -> {
                     transaction.replace(R.id.frame_layout, fragmentNotification).commit()
+                    setBottomIcon(it.itemId)
                 }
                 R.id.navigation_search -> {
                     transaction.replace(R.id.frame_layout, fragmentSearch).commit()
+                    setBottomIcon(it.itemId)
                 }
                 R.id.navigation_more -> {
                     transaction.replace(R.id.frame_layout, fragmentSetting).commit()
+                    setBottomIcon(it.itemId)
                 }
             }
             true
@@ -66,24 +72,26 @@ class MainActivity : AppCompatActivity() {
         unregister()
     }
 
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//
-//        if (resultCode == 100) {
-//            val realmResult = realm.where(IgnoreRO::class.java).findAll()
-//            for (result in realmResult) {
-//                Log.d("index :::: ", "${result.ignoreIndex}")
-//            }
-//        }
-//    }
-
     private fun init() {
+        bottomMain.itemIconTintList = null
         transaction = supportFragmentManager.beginTransaction()
         fragmentNotification = NotificationFragment()
         fragmentSearch = SearchFragment()
         fragmentSetting = SettingFragment()
 
         transaction.replace(R.id.frame_layout, fragmentNotification).commit()
+        setBottomIcon(R.id.navigation_notification)
+    }
+
+    private fun setBottomIcon(itemId: Int) {
+        // BottomNavigationView Icon Setting
+        for ((i, id) in itemIds.withIndex()) {
+            if (id == itemId) {
+                bottomMain.menu.findItem(id).icon = resources.getDrawable(icons2[i])
+            } else {
+                bottomMain.menu.findItem(id).icon = resources.getDrawable(icons[i])
+            }
+        }
     }
 
     private fun register() {

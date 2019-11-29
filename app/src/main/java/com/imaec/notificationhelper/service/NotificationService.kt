@@ -39,8 +39,8 @@ class NotificationHelperService : NotificationListenerService() {
         sbn.notification.extras.getBundle("android.wearable.EXTENSIONS")?.let {
             for (key in it.keySet()) {
                 it.get(key)?.let { obj ->
-                    Log.d("key :::: ", obj.toString())
-                    Log.d("obj :::: ", obj.toString())
+//                    Log.d("key :::: ", key)
+//                    Log.d("obj :::: ", obj.toString())
                     if (key.toString() == "background") {
                         bitmap2 = obj as Bitmap
                     }
