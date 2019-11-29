@@ -93,13 +93,13 @@ class SearchFragment : Fragment() {
                 .findAll()
         }
 
+        adapter.clearItem()
         if (realmResult.size == 0) {
             Toast.makeText(context, "검색 결과가 없습니다.", Toast.LENGTH_SHORT).show()
-            return
-        }
-        adapter.clearItem()
-        realmResult.forEach { content ->
-            adapter.addItem(content)
+        } else {
+            realmResult.forEach { content ->
+                adapter.addItem(content)
+            }
         }
         adapter.notifyDataSetChanged()
     }

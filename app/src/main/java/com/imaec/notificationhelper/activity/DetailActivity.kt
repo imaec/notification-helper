@@ -6,6 +6,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.InterstitialAd
+import com.google.android.gms.ads.MobileAds
+import com.imaec.notificationhelper.BuildConfig
 import com.imaec.notificationhelper.EndlessRecyclerOnScrollListener
 import com.imaec.notificationhelper.R
 import com.imaec.notificationhelper.adapter.DetailAdapter
@@ -15,9 +20,13 @@ import com.imaec.notificationhelper.model.NotificationRO
 import io.realm.Realm
 import io.realm.Sort
 import kotlinx.android.synthetic.main.activity_detail.*
+import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 class DetailActivity : AppCompatActivity() {
 
+    private lateinit var interstitialAd: InterstitialAd
     private lateinit var realm: Realm
     private lateinit var adapter: DetailAdapter
     private lateinit var layoutManager: LinearLayoutManager
@@ -25,10 +34,13 @@ class DetailActivity : AppCompatActivity() {
     private val listItem = ArrayList<ContentRO>()
     private var currentPage = 1
     private val count = 30
+    private var i = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
+
+        adInit()
 
         init()
 
@@ -42,6 +54,18 @@ class DetailActivity : AppCompatActivity() {
         })
     }
 
+    private fun adInit() {
+        interstitialAd = InterstitialAd(this).apply {
+            adUnitId =  if (BuildConfig.DEBUG) "ca-app-pub-3940256099942544/1033173712" else "ca-app-pub-7147836151485354/3729926444"
+            adListener = object : AdListener() {
+                override fun onAdLoaded() {
+                    interstitialAd.show()
+                }
+            }
+        }
+        adDetail.loadAd(AdRequest.Builder().build())
+    }
+
     private fun init() {
         realm = Realm.getDefaultInstance()
         adapter = DetailAdapter(Glide.with(this))
@@ -53,6 +77,7 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun getData() {
+        showAd()
         if (listItem.size == 0) {
             val packageName = intent.getStringExtra("packageName")
             adapter.setPackageName(packageName)
@@ -69,5 +94,14 @@ class DetailActivity : AppCompatActivity() {
             if (listItem.size > i) adapter.addItem(listItem[i])
         }
         adapter.notifyDataSetChanged()
+    }
+
+    private fun showAd() {
+        Random().let {
+            val ran = it.nextInt(7) + 1
+            if (i == ran) {
+                interstitialAd.loadAd(AdRequest.Builder().build())
+            }
+        }
     }
 }

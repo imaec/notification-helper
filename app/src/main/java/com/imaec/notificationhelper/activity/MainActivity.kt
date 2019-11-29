@@ -13,20 +13,28 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.InterstitialAd
+import com.google.android.gms.ads.MobileAds
 import com.imaec.notificationhelper.ACTION_NOTIFICATION
+import com.imaec.notificationhelper.BuildConfig
 import com.imaec.notificationhelper.R
 import kotlinx.android.synthetic.main.activity_main.*
 import com.imaec.notificationhelper.fragment.NotificationFragment
 import com.imaec.notificationhelper.fragment.SearchFragment
 import com.imaec.notificationhelper.fragment.SettingFragment
 import com.imaec.notificationhelper.service.NotificationHelperService
+import com.yesform.app.util.BackPressHandler
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var interstitialAd: InterstitialAd
     private lateinit var transaction: FragmentTransaction
     private lateinit var fragmentNotification: NotificationFragment
     private lateinit var fragmentSearch: SearchFragment
     private lateinit var fragmentSetting: SettingFragment
+    private lateinit var backPressHandler: BackPressHandler
 
     private var notificationReceiver: BroadcastReceiver? = null
     private val itemIds = listOf(R.id.navigation_notification, R.id.navigation_search, R.id.navigation_more)
@@ -36,6 +44,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        adInit()
 
         init()
 
@@ -72,12 +82,31 @@ class MainActivity : AppCompatActivity() {
         unregister()
     }
 
+    override fun onBackPressed() {
+        backPressHandler.onBackPressed()
+    }
+
+    private fun adInit() {
+        MobileAds.initialize(this) {}
+        interstitialAd = InterstitialAd(this).apply {
+            adUnitId =  if (BuildConfig.DEBUG) "ca-app-pub-3940256099942544/1033173712" else "ca-app-pub-7147836151485354/1446899106"
+            adListener = object : AdListener() {
+                override fun onAdLoaded() {
+                    interstitialAd.show()
+                }
+            }
+        }
+        interstitialAd.loadAd(AdRequest.Builder().build())
+        adMain.loadAd(AdRequest.Builder().build())
+    }
+
     private fun init() {
         bottomMain.itemIconTintList = null
         transaction = supportFragmentManager.beginTransaction()
         fragmentNotification = NotificationFragment()
         fragmentSearch = SearchFragment()
         fragmentSetting = SettingFragment()
+        backPressHandler = BackPressHandler(this)
 
         transaction.replace(R.id.frame_layout, fragmentNotification).commit()
         setBottomIcon(R.id.navigation_notification)
