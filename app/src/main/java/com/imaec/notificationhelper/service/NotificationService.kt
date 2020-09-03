@@ -33,7 +33,7 @@ class NotificationHelperService : NotificationListenerService() {
 
         val title = bundle.getString(Notification.EXTRA_TITLE) ?: return
         val content = bundle.getString(Notification.EXTRA_TEXT)
-        val bitmap = bundle.get(Notification.EXTRA_LARGE_ICON) as Bitmap?
+        val bitmap = bundle.get(Notification.EXTRA_LARGE_ICON_BIG) as Bitmap?
         var bitmap2: Bitmap? = null
 
         sbn.notification.extras.getBundle("android.wearable.EXTENSIONS")?.let {
