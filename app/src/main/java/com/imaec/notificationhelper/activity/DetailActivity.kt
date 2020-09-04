@@ -2,6 +2,7 @@ package com.imaec.notificationhelper.activity
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -60,6 +61,12 @@ class DetailActivity : AppCompatActivity() {
             adListener = object : AdListener() {
                 override fun onAdLoaded() {
                     interstitialAd.show()
+                    linearProgress.visibility = View.GONE
+                }
+
+                override fun onAdFailedToLoad(p0: Int) {
+                    linearProgress.visibility = View.GONE
+                    super.onAdFailedToLoad(p0)
                 }
             }
         }

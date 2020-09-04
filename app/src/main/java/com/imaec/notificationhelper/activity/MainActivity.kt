@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
@@ -29,6 +30,10 @@ import com.yesform.app.util.BackPressHandler
 
 class MainActivity : AppCompatActivity() {
 
+    companion object {
+        val adLoaded = MutableLiveData<Boolean>(false)
+    }
+
     private lateinit var interstitialAd: InterstitialAd
     private lateinit var transaction: FragmentTransaction
     private lateinit var fragmentNotification: NotificationFragment
@@ -44,6 +49,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        startActivityForResult(Intent(this, SplashActivity::class.java), 0)
 
         adInit()
 
@@ -86,13 +93,22 @@ class MainActivity : AppCompatActivity() {
         backPressHandler.onBackPressed()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == RESULT_OK) {
+            interstitialAd.show()
+            adLoaded.value = false
+        }
+    }
+
     private fun adInit() {
         MobileAds.initialize(this) {}
         interstitialAd = InterstitialAd(this).apply {
             adUnitId =  if (BuildConfig.DEBUG) "ca-app-pub-3940256099942544/1033173712" else "ca-app-pub-7147836151485354/1446899106"
             adListener = object : AdListener() {
                 override fun onAdLoaded() {
-                    interstitialAd.show()
+                    adLoaded.value = true
                 }
             }
         }

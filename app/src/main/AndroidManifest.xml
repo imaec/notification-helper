@@ -19,6 +19,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".activity.SplashActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".activity.DetailActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.ImageActivity"
