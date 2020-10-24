@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "572950746570",
+    "firebase_url": "https://notificationhelper-88cbc.firebaseio.com",
+    "project_id": "notificationhelper-88cbc",
+    "storage_bucket": "notificationhelper-88cbc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:572950746570:android:1c645b412ab1708da3eb33",
+        "android_client_info": {
+          "package_name": "com.imaec.notificationhelper"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "572950746570-t61ogki1r6oo5iif28g704fefthbu8p7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYpGBFSls9dBx9ldkIzGTPbii64KiSdjI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "572950746570-t61ogki1r6oo5iif28g704fefthbu8p7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

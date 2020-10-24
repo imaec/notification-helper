@@ -7,10 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.InterstitialAd
-import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.*
 import com.imaec.notificationhelper.BuildConfig
 import com.imaec.notificationhelper.EndlessRecyclerOnScrollListener
 import com.imaec.notificationhelper.R
@@ -26,6 +23,8 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class DetailActivity : AppCompatActivity() {
+
+    private val TAG = this::class.java.simpleName
 
     private lateinit var interstitialAd: InterstitialAd
     private lateinit var realm: Realm
@@ -57,7 +56,7 @@ class DetailActivity : AppCompatActivity() {
 
     private fun adInit() {
         interstitialAd = InterstitialAd(this).apply {
-            adUnitId =  if (BuildConfig.DEBUG) "ca-app-pub-3940256099942544/1033173712" else "ca-app-pub-7147836151485354/3729926444"
+            adUnitId = getString(R.string.ad_id_detail_front)
             adListener = object : AdListener() {
                 override fun onAdLoaded() {
                     interstitialAd.show()
@@ -65,6 +64,13 @@ class DetailActivity : AppCompatActivity() {
                 }
 
                 override fun onAdFailedToLoad(p0: Int) {
+                    Log.d(TAG, "    ## error : $p0")
+                    linearProgress.visibility = View.GONE
+                    super.onAdFailedToLoad(p0)
+                }
+
+                override fun onAdFailedToLoad(p0: LoadAdError?) {
+                    Log.d(TAG, "    ## error : $p0")
                     linearProgress.visibility = View.GONE
                     super.onAdFailedToLoad(p0)
                 }
@@ -105,9 +111,11 @@ class DetailActivity : AppCompatActivity() {
 
     private fun showAd() {
         Random().let {
-            val ran = it.nextInt(7) + 1
+            val ran = it.nextInt(9) + 1
             if (i == ran) {
                 interstitialAd.loadAd(AdRequest.Builder().build())
+            } else {
+                linearProgress.visibility = View.GONE
             }
         }
     }

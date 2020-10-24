@@ -105,7 +105,7 @@ class MainActivity : AppCompatActivity() {
     private fun adInit() {
         MobileAds.initialize(this) {}
         interstitialAd = InterstitialAd(this).apply {
-            adUnitId =  if (BuildConfig.DEBUG) "ca-app-pub-3940256099942544/1033173712" else "ca-app-pub-7147836151485354/1446899106"
+            adUnitId = getString(R.string.ad_id_splash_front)
             adListener = object : AdListener() {
                 override fun onAdLoaded() {
                     adLoaded.value = true

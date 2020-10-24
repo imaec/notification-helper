@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.imaec.notificationhelper.R
@@ -47,7 +48,7 @@ class NotificationAdapter(val glide: RequestManager) : RecyclerView.Adapter<Recy
         @SuppressLint("SetTextI18n")
         fun onBind(item: NotificationRO) {
             glide
-                .load(Utils.getAppIcon(context, item.packageName))
+                .load(Utils.getAppIcon(context, item.packageName) ?: ContextCompat.getDrawable(context, R.mipmap.ic_launcher))
                 .into(imageIcon)
             textName.text = "${item.appName} (${item.contents.size})"
 

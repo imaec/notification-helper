@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             ads:adSize="SMART_BANNER"
-            ads:adUnitId="ca-app-pub-7147836151485354/6044619660"/>
+            ads:adUnitId="@string/ad_id_main_banner"/>
     </LinearLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

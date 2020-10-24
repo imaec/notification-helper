@@ -2,12 +2,12 @@ package com.imaec.notificationhelper
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import java.io.ByteArrayOutputStream
-import android.graphics.BitmapFactory
-
 
 
 class Utils {
@@ -32,8 +32,12 @@ class Utils {
             return ""
         }
 
-        fun getAppIcon(context: Context, packageName: String): Drawable {
-            return context.packageManager.getApplicationIcon(packageName)
+        fun getAppIcon(context: Context, packageName: String): Drawable? {
+            return try {
+                context.packageManager.getApplicationIcon(packageName)
+            } catch (e: PackageManager.NameNotFoundException) {
+                null
+            }
         }
 
         fun getByteArray(bitmap: Bitmap?): ByteArray? {
