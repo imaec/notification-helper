@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name="tab_ids">
+        <item>@id/navigation_notification</item>
+        <item>@id/navigation_search</item>
+        <item>@id/navigation_more</item>
+    </integer-array>
+
+    <integer-array name="tab_icons">
+        <item>@mipmap/ic_notification_list</item>
+        <item>@mipmap/ic_search</item>
+        <item>@mipmap/ic_more</item>
+    </integer-array>
+</resources>

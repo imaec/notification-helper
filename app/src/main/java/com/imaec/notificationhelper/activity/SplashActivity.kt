@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.imaec.notificationhelper.R
+import com.imaec.notificationhelper.ui.view.activity.MainActivity
 
 @Suppress("REDUNDANT_LABEL_WARNING")
 class SplashActivity : AppCompatActivity() {

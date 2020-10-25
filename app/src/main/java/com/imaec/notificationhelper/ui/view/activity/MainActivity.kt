@@ -1,79 +1,57 @@
-package com.imaec.notificationhelper.activity
+package com.imaec.notificationhelper.ui.view.activity
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ActivityManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.ads.MobileAds
 import com.imaec.notificationhelper.ACTION_NOTIFICATION
-import com.imaec.notificationhelper.BuildConfig
 import com.imaec.notificationhelper.R
-import kotlinx.android.synthetic.main.activity_main.*
+import com.imaec.notificationhelper.activity.SplashActivity
+import com.imaec.notificationhelper.base.BaseActivity
+import com.imaec.notificationhelper.databinding.ActivityMainBinding
 import com.imaec.notificationhelper.fragment.NotificationFragment
 import com.imaec.notificationhelper.fragment.SearchFragment
 import com.imaec.notificationhelper.fragment.SettingFragment
 import com.imaec.notificationhelper.service.NotificationHelperService
 import com.yesform.app.util.BackPressHandler
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     companion object {
         val adLoaded = MutableLiveData<Boolean>(false)
     }
 
-    private lateinit var interstitialAd: InterstitialAd
-    private lateinit var transaction: FragmentTransaction
-    private lateinit var fragmentNotification: NotificationFragment
-    private lateinit var fragmentSearch: SearchFragment
-    private lateinit var fragmentSetting: SettingFragment
     private lateinit var backPressHandler: BackPressHandler
+    private var fragmentNotification = NotificationFragment()
+    private var fragmentSearch = SearchFragment()
+    private var fragmentSetting = SettingFragment()
+    private var activeFragment: Fragment = fragmentNotification
 
     private var notificationReceiver: BroadcastReceiver? = null
     private val itemIds = listOf(R.id.navigation_notification, R.id.navigation_search, R.id.navigation_more)
-    private val icons = listOf(R.mipmap.ic_notification_list, R.mipmap.ic_search, R.mipmap.ic_more)
-    private val icons2 = listOf(R.mipmap.ic_notification_list, R.mipmap.ic_search, R.mipmap.ic_more)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        startActivityForResult(Intent(this, SplashActivity::class.java), 0)
 
         adInit()
 
-        init()
+        startActivityForResult(Intent(this, SplashActivity::class.java), 0)
 
-        bottomMain.setOnNavigationItemSelectedListener {
-            transaction = supportFragmentManager.beginTransaction()
-            when (it.itemId) {
-                R.id.navigation_notification -> {
-                    transaction.replace(R.id.frame_layout, fragmentNotification).commit()
-                    setBottomIcon(it.itemId)
-                }
-                R.id.navigation_search -> {
-                    transaction.replace(R.id.frame_layout, fragmentSearch).commit()
-                    setBottomIcon(it.itemId)
-                }
-                R.id.navigation_more -> {
-                    transaction.replace(R.id.frame_layout, fragmentSetting).commit()
-                    setBottomIcon(it.itemId)
-                }
-            }
-            true
-        }
+        init()
     }
 
     override fun onResume() {
@@ -103,7 +81,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun adInit() {
-        MobileAds.initialize(this) {}
         interstitialAd = InterstitialAd(this).apply {
             adUnitId = getString(R.string.ad_id_splash_front)
             adListener = object : AdListener() {
@@ -113,30 +90,37 @@ class MainActivity : AppCompatActivity() {
             }
         }
         interstitialAd.loadAd(AdRequest.Builder().build())
-        adMain.loadAd(AdRequest.Builder().build())
+        binding.adMain.loadAd(AdRequest.Builder().build())
     }
 
+    @SuppressLint("Recycle")
     private fun init() {
-        bottomMain.itemIconTintList = null
-        transaction = supportFragmentManager.beginTransaction()
-        fragmentNotification = NotificationFragment()
-        fragmentSearch = SearchFragment()
-        fragmentSetting = SettingFragment()
-        backPressHandler = BackPressHandler(this)
-
-        transaction.replace(R.id.frame_layout, fragmentNotification).commit()
-        setBottomIcon(R.id.navigation_notification)
-    }
-
-    private fun setBottomIcon(itemId: Int) {
-        // BottomNavigationView Icon Setting
-        for ((i, id) in itemIds.withIndex()) {
-            if (id == itemId) {
-                bottomMain.menu.findItem(id).icon = resources.getDrawable(icons2[i])
-            } else {
-                bottomMain.menu.findItem(id).icon = resources.getDrawable(icons[i])
+        binding.apply {
+            lifecycleOwner = this@MainActivity
+            bottomMain.apply {
+                // BottomNavigationView Icon Setting
+                resources.getIntArray(R.array.tab_ids).forEachIndexed { index, _ ->
+                    val id = resources.obtainTypedArray(R.array.tab_ids).getResourceId(index, -1)
+                    val icon = resources.obtainTypedArray(R.array.tab_icons).getResourceId(index, -1)
+                    menu.findItem(id).setIcon(icon)
+                }
+                itemIconTintList = null
+                setOnNavigationItemSelectedListener {
+                    setFragment(when (it.itemId) {
+                        R.id.navigation_notification -> fragmentNotification
+                        R.id.navigation_search -> fragmentSearch
+                        R.id.navigation_more -> fragmentSetting
+                        else -> fragmentNotification
+                    })
+                    true
+                }
             }
         }
+
+        supportFragmentManager.beginTransaction().add(R.id.frame, fragmentSetting, getString(R.string.setting)).hide(fragmentSetting).commitAllowingStateLoss()
+        supportFragmentManager.beginTransaction().add(R.id.frame, fragmentSearch, getString(R.string.search)).hide(fragmentSearch).commitAllowingStateLoss()
+        supportFragmentManager.beginTransaction().add(R.id.frame, fragmentNotification, getString(R.string.notification)).commitAllowingStateLoss()
+        backPressHandler = BackPressHandler(this)
     }
 
     private fun register() {
@@ -202,5 +186,14 @@ class MainActivity : AppCompatActivity() {
         } else {
             Log.d("isRunning :::: ", "true")
         }
+    }
+
+    private fun setFragment(fragment: Fragment) {
+        supportFragmentManager
+            .beginTransaction()
+            .hide(activeFragment)
+            .show(fragment)
+            .commit()
+        activeFragment = fragment
     }
 }
