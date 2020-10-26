@@ -8,22 +8,22 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
-import com.google.android.gms.ads.MobileAds
 import com.imaec.notificationhelper.ACTION_NOTIFICATION
+import com.imaec.notificationhelper.ActivityRequestCode
 import com.imaec.notificationhelper.R
 import com.imaec.notificationhelper.activity.SplashActivity
 import com.imaec.notificationhelper.base.BaseActivity
 import com.imaec.notificationhelper.databinding.ActivityMainBinding
-import com.imaec.notificationhelper.fragment.NotificationFragment
+import com.imaec.notificationhelper.ui.view.fragment.NotificationFragment
 import com.imaec.notificationhelper.fragment.SearchFragment
 import com.imaec.notificationhelper.fragment.SettingFragment
 import com.imaec.notificationhelper.service.NotificationHelperService
@@ -32,7 +32,7 @@ import com.yesform.app.util.BackPressHandler
 class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     companion object {
-        val adLoaded = MutableLiveData<Boolean>(false)
+        val adLoaded = MutableLiveData(false)
     }
 
     private lateinit var backPressHandler: BackPressHandler
@@ -42,14 +42,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     private var activeFragment: Fragment = fragmentNotification
 
     private var notificationReceiver: BroadcastReceiver? = null
-    private val itemIds = listOf(R.id.navigation_notification, R.id.navigation_search, R.id.navigation_more)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         adInit()
 
-        startActivityForResult(Intent(this, SplashActivity::class.java), 0)
+        startActivityForResult(Intent(this, SplashActivity::class.java), ActivityRequestCode.REQUEST_SPLASH_FINISH)
 
         init()
     }
@@ -74,9 +73,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (resultCode == RESULT_OK) {
-            interstitialAd.show()
-            adLoaded.value = false
+        if (requestCode == ActivityRequestCode.REQUEST_SPLASH_FINISH) {
+            if (resultCode == RESULT_OK) {
+                interstitialAd.show()
+                adLoaded.value = false
+            }
         }
     }
 
@@ -153,15 +154,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         ) { isDenied = false }
         if (isDenied) {
             AlertDialog.Builder(this).apply {
-                setTitle("안내")
-                setMessage("알림리스트를 사용하시려면\n'알림 접근 권한'을 '허용'하셔야 합니다.\n'${getString(R.string.app_name)}'의 알림 접근을 허용해주세요.")
-                setNegativeButton("취소") { dialog, which ->
+                setTitle(R.string.info)
+                setMessage(getString(R.string.msg_access_notification, getString(R.string.app_name)))
+                setNegativeButton(R.string.cancel) { dialog, _ ->
                     dialog.dismiss()
                     this@MainActivity.finish()
                 }
-                setPositiveButton("확인") { dialog, which ->
+                setPositiveButton(R.string.ok) { dialog, _ ->
                     dialog.dismiss()
-                    startActivity(Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"))
+                    startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
                 }
                 create()
                 show()
@@ -173,18 +174,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         var isServiceRunning = false
         val manager = this.getSystemService(Activity.ACTIVITY_SERVICE) as ActivityManager
         for (service in manager.getRunningServices(Integer.MAX_VALUE)) {
-            Log.d("servicename :::: ", service.service.className)
+            Log.d(TAG, "    ## serviceName : ${service.service.className}")
             if ("${packageName}.NotificationHelperService" == service.service.className) {
                 isServiceRunning = true
             }
         }
 
+        Log.d(TAG, "    ## isRunning : $isServiceRunning")
         if (!isServiceRunning) {
-            Log.d("isRunning :::: ", "false")
             val intent = Intent(this, NotificationHelperService::class.java)
             startService(intent)
-        } else {
-            Log.d("isRunning :::: ", "true")
         }
     }
 

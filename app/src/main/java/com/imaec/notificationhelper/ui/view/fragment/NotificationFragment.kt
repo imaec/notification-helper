@@ -1,29 +1,25 @@
-package com.imaec.notificationhelper.fragment
+package com.imaec.notificationhelper.ui.view.fragment
 
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.imaec.notificationhelper.R
 import com.imaec.notificationhelper.adapter.NotificationAdapter
+import com.imaec.notificationhelper.base.BaseFragment
+import com.imaec.notificationhelper.databinding.FragmentNotificationBinding
 import com.imaec.notificationhelper.model.IgnoreRO
 import com.imaec.notificationhelper.model.NotificationRO
 import io.realm.Realm
 import io.realm.Sort
 import kotlinx.android.synthetic.main.fragment_notification.*
 
-class NotificationFragment : Fragment() {
+class NotificationFragment : BaseFragment<FragmentNotificationBinding>(R.layout.fragment_notification) {
 
-    private lateinit var realm: Realm
-    private lateinit var adapter: NotificationAdapter
-    private lateinit var layoutManager: LinearLayoutManager
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? = inflater.inflate(R.layout.fragment_notification, container, false)
+    private val realm by lazy { Realm.getDefaultInstance() }
+    private val adapter by lazy { NotificationAdapter(Glide.with(this)) }
+    private val layoutManager = LinearLayoutManager(context)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -31,20 +27,22 @@ class NotificationFragment : Fragment() {
         init()
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (hidden) return
 
         getData()
     }
 
     private fun init() {
-        realm = Realm.getDefaultInstance()
-        adapter = NotificationAdapter(Glide.with(this))
-        layoutManager = LinearLayoutManager(context)
+        binding.apply {
+            lifecycleOwner = this@NotificationFragment
+            recyclerNotification.adapter = adapter
+            recyclerNotification.layoutManager = layoutManager
+            recyclerNotification.addItemDecoration(DividerItemDecoration(context, layoutManager.orientation))
+        }
 
-        recyclerNotification.adapter = adapter
-        recyclerNotification.layoutManager = layoutManager
-        recyclerNotification.addItemDecoration(DividerItemDecoration(context, layoutManager.orientation))
+        getData()
     }
 
     private fun getData() {
@@ -58,7 +56,7 @@ class NotificationFragment : Fragment() {
                 .equalTo("packageName", it.packageName)
                 .findFirst()
             if (ignore == null) {
-                linearNotificationEmpty.visibility = View.GONE
+                binding.textEmptyNotification.visibility = View.GONE
                 adapter.addItem(it)
             }
         }
