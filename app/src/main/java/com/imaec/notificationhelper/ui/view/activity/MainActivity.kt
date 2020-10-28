@@ -25,7 +25,7 @@ import com.imaec.notificationhelper.base.BaseActivity
 import com.imaec.notificationhelper.databinding.ActivityMainBinding
 import com.imaec.notificationhelper.ui.view.fragment.NotificationFragment
 import com.imaec.notificationhelper.ui.view.fragment.SearchFragment
-import com.imaec.notificationhelper.fragment.SettingFragment
+import com.imaec.notificationhelper.ui.view.fragment.SettingFragment
 import com.imaec.notificationhelper.service.NotificationHelperService
 import com.yesform.app.util.BackPressHandler
 

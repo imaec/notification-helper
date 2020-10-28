@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.imaec.notificationhelper.R
-import com.imaec.notificationhelper.fragment.SettingFragment
+import com.imaec.notificationhelper.ui.view.fragment.SettingFragment
 import com.imaec.notificationhelper.model.AppData
 import com.imaec.notificationhelper.model.IgnoreRO
 import io.realm.RealmResults
