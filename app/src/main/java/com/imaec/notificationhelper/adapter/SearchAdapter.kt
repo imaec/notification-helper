@@ -7,7 +7,6 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.ContentView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.imaec.notificationhelper.R
@@ -72,8 +71,8 @@ class SearchAdapter(var glide: RequestManager) : RecyclerView.Adapter<RecyclerVi
 
     inner class NameViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        private val imageIcon by lazy { itemView.imageItemIcon }
-        private val textName by lazy { itemView.textItemName }
+        private val imageIcon by lazy { itemView.image_item_icon }
+        private val textName by lazy { itemView.text_item_name }
 
         @SuppressLint("SetTextI18n")
         fun onBind(item: NotificationRO) {

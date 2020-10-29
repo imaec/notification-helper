@@ -1,19 +1,20 @@
 package com.imaec.notificationhelper.ui.view.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.imaec.notificationhelper.R
-import com.imaec.notificationhelper.adapter.NotificationAdapter
+import com.imaec.notificationhelper.activity.DetailActivity
+import com.imaec.notificationhelper.ui.adapter.NotificationAdapter
 import com.imaec.notificationhelper.base.BaseFragment
 import com.imaec.notificationhelper.databinding.FragmentNotificationBinding
 import com.imaec.notificationhelper.model.IgnoreRO
 import com.imaec.notificationhelper.model.NotificationRO
 import io.realm.Realm
 import io.realm.Sort
-import kotlinx.android.synthetic.main.fragment_notification.*
 
 class NotificationFragment : BaseFragment<FragmentNotificationBinding>(R.layout.fragment_notification) {
 
@@ -25,6 +26,15 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(R.layout.
         super.onViewCreated(view, savedInstanceState)
 
         init()
+
+        adapter.addOnClickListener { item ->
+            if (item is NotificationRO) {
+                val intent = Intent(context, DetailActivity::class.java).apply {
+                    putExtra("packageName", item.packageName)
+                }
+                startActivity(intent)
+            }
+        }
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
