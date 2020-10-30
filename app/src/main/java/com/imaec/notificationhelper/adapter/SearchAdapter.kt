@@ -92,11 +92,11 @@ class SearchAdapter(var glide: RequestManager) : RecyclerView.Adapter<RecyclerVi
 
     inner class ContentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        private val imageIcon by lazy { itemView.imageItemDetailIcon }
-        private val textTitle by lazy { itemView.textItemTitle }
-        private val imageContent by lazy { itemView.imageItemContent }
-        private val textContent by lazy { itemView.textItemContent }
-        private val textTime by lazy { itemView.textItemTime }
+        private val imageIcon by lazy { itemView.image_item_detail_icon }
+        private val textTitle by lazy { itemView.text_item_title }
+        private val imageContent by lazy { itemView.image_item_content }
+        private val textContent by lazy { itemView.text_item_content }
+        private val textTime by lazy { itemView.text_item_time }
 
         @SuppressLint("SimpleDateFormat")
         fun onBind(item: ContentRO) {

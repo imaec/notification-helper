@@ -3,7 +3,6 @@ package com.imaec.notificationhelper.adapter
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +12,6 @@ import com.bumptech.glide.RequestManager
 import com.imaec.notificationhelper.R
 import com.imaec.notificationhelper.Utils
 import com.imaec.notificationhelper.activity.ImageActivity
-import com.imaec.notificationhelper.model.ContentData
 import com.imaec.notificationhelper.model.ContentRO
 import kotlinx.android.synthetic.main.item_detail.view.*
 import java.text.SimpleDateFormat
@@ -41,11 +39,11 @@ class DetailAdapter(val glide: RequestManager) : RecyclerView.Adapter<RecyclerVi
 
     inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        private val imageIcon by lazy { itemView.imageItemDetailIcon }
-        private val textTitle by lazy { itemView.textItemTitle }
-        private val imageContent by lazy { itemView.imageItemContent }
-        private val textContent by lazy { itemView.textItemContent }
-        private val textTime by lazy { itemView.textItemTime }
+        private val imageIcon by lazy { itemView.image_item_detail_icon }
+        private val textTitle by lazy { itemView.text_item_title }
+        private val imageContent by lazy { itemView.image_item_content }
+        private val textContent by lazy { itemView.text_item_content }
+        private val textTime by lazy { itemView.text_item_time }
 
         @SuppressLint("SimpleDateFormat")
         fun onBind(item: ContentRO) {
