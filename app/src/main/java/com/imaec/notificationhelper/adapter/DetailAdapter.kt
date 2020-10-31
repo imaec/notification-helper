@@ -1,49 +1,46 @@
 package com.imaec.notificationhelper.adapter
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.imaec.notificationhelper.R
 import com.imaec.notificationhelper.Utils
 import com.imaec.notificationhelper.activity.ImageActivity
+import com.imaec.notificationhelper.base.BaseAdapter
+import com.imaec.notificationhelper.databinding.ItemDetailBinding
 import com.imaec.notificationhelper.model.ContentRO
-import kotlinx.android.synthetic.main.item_detail.view.*
 import java.text.SimpleDateFormat
 
-class DetailAdapter(val glide: RequestManager) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class DetailAdapter(val glide: RequestManager) : BaseAdapter() {
 
-    private lateinit var context: Context
     private lateinit var packageName: String
 
-    private val listItem = ArrayList<ContentRO>()
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        context = parent.context
-        val view = LayoutInflater.from(context).inflate(R.layout.item_detail, parent, false)
-        return ItemViewHolder(view)
+        binding = ItemDetailBinding.inflate(LayoutInflater.from(parent.context))
+        return ItemViewHolder(binding as ItemDetailBinding)
     }
 
     override fun getItemCount(): Int = listItem.size
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is ItemViewHolder) {
-            holder.onBind(listItem[position])
+            holder.onBind(listItem[position] as ContentRO)
         }
     }
 
-    inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ItemViewHolder(val binding: ItemDetailBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        private val imageIcon by lazy { itemView.image_item_detail_icon }
-        private val textTitle by lazy { itemView.text_item_title }
-        private val imageContent by lazy { itemView.image_item_content }
-        private val textContent by lazy { itemView.text_item_content }
-        private val textTime by lazy { itemView.text_item_time }
+        private val imageIcon by lazy { binding.root.findViewById<ImageView>(R.id.image_item_detail_icon) }
+        private val textTitle by lazy { binding.root.findViewById<TextView>(R.id.text_item_title) }
+        private val imageContent by lazy { binding.root.findViewById<ImageView>(R.id.image_item_content) }
+        private val textContent by lazy { binding.root.findViewById<TextView>(R.id.text_item_content) }
+        private val textTime by lazy { binding.root.findViewById<TextView>(R.id.text_item_time) }
 
         @SuppressLint("SimpleDateFormat")
         fun onBind(item: ContentRO) {
@@ -55,7 +52,7 @@ class DetailAdapter(val glide: RequestManager) : RecyclerView.Adapter<RecyclerVi
                     .into(imageIcon)
             } ?: run {
                 glide
-                    .load(Utils.getAppIcon(context, packageName))
+                    .load(Utils.getAppIcon(binding.root.context, packageName))
                     .into(imageIcon)
             }
             bitmap2?.let {
@@ -70,20 +67,12 @@ class DetailAdapter(val glide: RequestManager) : RecyclerView.Adapter<RecyclerVi
             textContent.text = item.content
             textTime.text = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(item.pKey)
 
-            itemView.setOnClickListener {
-                AlertDialog.Builder(context).apply {
-                    setTitle(item.title)
-                    setMessage(item.content)
-                    setPositiveButton("확인") { dialog, which ->
-                        dialog.dismiss()
-                    }
-                    create()
-                    show()
-                }
+            binding.root.setOnClickListener {
+                onClick(item)
             }
 
             imageContent.setOnClickListener {
-                context.startActivity(Intent(context, ImageActivity::class.java).apply {
+                binding.root.context.startActivity(Intent(binding.root.context, ImageActivity::class.java).apply {
                     putExtra("img", item.img2)
                 })
             }

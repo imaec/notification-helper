@@ -3,6 +3,7 @@ package com.imaec.notificationhelper.activity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -46,6 +47,19 @@ class DetailActivity : AppCompatActivity() {
 
         getData()
 
+        adapter.addOnClickListener { item ->
+            if (item is ContentRO) {
+                AlertDialog.Builder(this).apply {
+                    setTitle(item.title)
+                    setMessage(item.content)
+                    setPositiveButton("확인") { dialog, which ->
+                        dialog.dismiss()
+                    }
+                    create()
+                    show()
+                }
+            }
+        }
         recyclerDetail.addOnScrollListener(object : EndlessRecyclerOnScrollListener(layoutManager) {
             override fun onLoadMore(current_page: Int) {
                 currentPage = current_page + 1
