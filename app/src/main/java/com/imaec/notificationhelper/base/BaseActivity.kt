@@ -29,4 +29,12 @@ abstract class BaseActivity<T : ViewDataBinding>(@LayoutRes private val layoutRe
     private fun init() {
         MobileAds.initialize(this) {}
     }
+
+    protected fun showProgress() {
+        if (!progressDialog.isShowing) progressDialog.show()
+    }
+
+    protected fun hideProgress() {
+        if (progressDialog.isShowing) progressDialog.dismiss()
+    }
 }

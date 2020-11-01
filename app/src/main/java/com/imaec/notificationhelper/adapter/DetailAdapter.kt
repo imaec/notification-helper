@@ -82,8 +82,4 @@ class DetailAdapter(val glide: RequestManager) : BaseAdapter() {
     fun setPackageName(packageName: String) {
         this.packageName = packageName
     }
-
-    fun addItem(item: ContentRO) {
-        listItem.add(item)
-    }
 }

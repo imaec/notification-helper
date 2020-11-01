@@ -1,36 +1,29 @@
-package com.imaec.notificationhelper.activity
+package com.imaec.notificationhelper.ui.view.activity
 
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.gms.ads.*
-import com.imaec.notificationhelper.BuildConfig
 import com.imaec.notificationhelper.EndlessRecyclerOnScrollListener
 import com.imaec.notificationhelper.R
 import com.imaec.notificationhelper.adapter.DetailAdapter
-import com.imaec.notificationhelper.model.ContentData
+import com.imaec.notificationhelper.base.BaseActivity
+import com.imaec.notificationhelper.databinding.ActivityDetailBinding
 import com.imaec.notificationhelper.model.ContentRO
 import com.imaec.notificationhelper.model.NotificationRO
 import io.realm.Realm
-import io.realm.Sort
 import kotlinx.android.synthetic.main.activity_detail.*
-import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-class DetailActivity : AppCompatActivity() {
+class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_detail) {
 
-    private val TAG = this::class.java.simpleName
-
-    private lateinit var interstitialAd: InterstitialAd
-    private lateinit var realm: Realm
-    private lateinit var adapter: DetailAdapter
-    private lateinit var layoutManager: LinearLayoutManager
+    private val realm by lazy { Realm.getDefaultInstance() }
+    private val adapter by lazy { DetailAdapter(Glide.with(this)) }
+    private val layoutManager = LinearLayoutManager(this)
 
     private val listItem = ArrayList<ContentRO>()
     private var currentPage = 1
@@ -39,13 +32,10 @@ class DetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_detail)
 
         adInit()
 
         init()
-
-        getData()
 
         adapter.addOnClickListener { item ->
             if (item is ContentRO) {
@@ -60,12 +50,6 @@ class DetailActivity : AppCompatActivity() {
                 }
             }
         }
-        recyclerDetail.addOnScrollListener(object : EndlessRecyclerOnScrollListener(layoutManager) {
-            override fun onLoadMore(current_page: Int) {
-                currentPage = current_page + 1
-                getData()
-            }
-        })
     }
 
     private fun adInit() {
@@ -74,36 +58,46 @@ class DetailActivity : AppCompatActivity() {
             adListener = object : AdListener() {
                 override fun onAdLoaded() {
                     interstitialAd.show()
-                    linearProgress.visibility = View.GONE
+                    hideProgress()
                 }
 
                 override fun onAdFailedToLoad(p0: Int) {
                     Log.d(TAG, "    ## error : $p0")
-                    linearProgress.visibility = View.GONE
+                    hideProgress()
                     super.onAdFailedToLoad(p0)
                 }
 
                 override fun onAdFailedToLoad(p0: LoadAdError?) {
                     Log.d(TAG, "    ## error : $p0")
-                    linearProgress.visibility = View.GONE
+                    hideProgress()
                     super.onAdFailedToLoad(p0)
                 }
             }
         }
-        adDetail.loadAd(AdRequest.Builder().build())
+        binding.adDetail.loadAd(AdRequest.Builder().build())
     }
 
     private fun init() {
-        realm = Realm.getDefaultInstance()
-        adapter = DetailAdapter(Glide.with(this))
-        layoutManager = LinearLayoutManager(this)
+        binding.apply {
+            lifecycleOwner = this@DetailActivity
+            recyclerDetail.apply {
+                adapter = this@DetailActivity.adapter
+                layoutManager = this@DetailActivity.layoutManager
+                addItemDecoration(DividerItemDecoration(this@DetailActivity, this@DetailActivity.layoutManager.orientation))
+                addOnScrollListener(object : EndlessRecyclerOnScrollListener(this@DetailActivity.layoutManager) {
+                    override fun onLoadMore(current_page: Int) {
+                        currentPage = current_page + 1
+                        getData()
+                    }
+                })
+            }
+        }
 
-        recyclerDetail.adapter = adapter
-        recyclerDetail.layoutManager = layoutManager
-        recyclerDetail.addItemDecoration(DividerItemDecoration(this, layoutManager.orientation))
+        getData()
     }
 
     private fun getData() {
+        showProgress()
         showAd()
         if (listItem.size == 0) {
             val packageName = intent.getStringExtra("packageName")
@@ -112,6 +106,7 @@ class DetailActivity : AppCompatActivity() {
                 .equalTo("packageName", packageName)
                 .findFirst()
             realmResult?.let {
+                Log.d(TAG, "    ## ${it.contents}")
                 listItem.addAll(it.contents)
             }
             listItem.reverse()
@@ -129,7 +124,7 @@ class DetailActivity : AppCompatActivity() {
             if (i == ran) {
                 interstitialAd.loadAd(AdRequest.Builder().build())
             } else {
-                linearProgress.visibility = View.GONE
+                hideProgress()
             }
         }
     }

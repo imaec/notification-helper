@@ -1,10 +1,7 @@
 package com.imaec.notificationhelper.ui.adapter
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -13,11 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.imaec.notificationhelper.R
 import com.imaec.notificationhelper.Utils
-import com.imaec.notificationhelper.activity.DetailActivity
 import com.imaec.notificationhelper.base.BaseAdapter
 import com.imaec.notificationhelper.databinding.ItemNotificationBinding
 import com.imaec.notificationhelper.model.NotificationRO
-import kotlinx.android.synthetic.main.item_notification.view.*
 
 class NotificationAdapter(val glide: RequestManager) : BaseAdapter() {
 
