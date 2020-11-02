@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.imaec.notificationhelper.R
 import com.imaec.notificationhelper.Utils
-import com.imaec.notificationhelper.activity.ImageActivity
+import com.imaec.notificationhelper.ui.view.activity.ImageActivity
 import com.imaec.notificationhelper.base.BaseAdapter
 import com.imaec.notificationhelper.databinding.ItemDetailBinding
 import com.imaec.notificationhelper.model.ContentRO

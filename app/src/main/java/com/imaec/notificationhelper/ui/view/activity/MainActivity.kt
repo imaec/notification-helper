@@ -20,7 +20,6 @@ import com.google.android.gms.ads.InterstitialAd
 import com.imaec.notificationhelper.ACTION_NOTIFICATION
 import com.imaec.notificationhelper.ActivityRequestCode
 import com.imaec.notificationhelper.R
-import com.imaec.notificationhelper.activity.SplashActivity
 import com.imaec.notificationhelper.base.BaseActivity
 import com.imaec.notificationhelper.databinding.ActivityMainBinding
 import com.imaec.notificationhelper.ui.view.fragment.NotificationFragment

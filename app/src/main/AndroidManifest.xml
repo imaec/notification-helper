@@ -19,11 +19,11 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.SplashActivity"
+        <activity android:name=".ui.view.activity.SplashActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.view.activity.DetailActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".activity.ImageActivity"
+        <activity android:name=".ui.view.activity.ImageActivity"
             android:screenOrientation="portrait"/>
 
         <service

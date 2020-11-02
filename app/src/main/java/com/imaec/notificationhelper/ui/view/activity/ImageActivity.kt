@@ -1,27 +1,29 @@
-package com.imaec.notificationhelper.activity
+package com.imaec.notificationhelper.ui.view.activity
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.imaec.notificationhelper.R
 import com.imaec.notificationhelper.Utils
-import kotlinx.android.synthetic.main.activity_image.*
+import com.imaec.notificationhelper.base.BaseActivity
+import com.imaec.notificationhelper.databinding.ActivityImageBinding
 
-class ImageActivity : AppCompatActivity() {
+class ImageActivity : BaseActivity<ActivityImageBinding>(R.layout.activity_image) {
 
     private lateinit var img: ByteArray
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_image)
 
         init()
     }
 
     private fun init() {
         img = intent.getByteArrayExtra("img")
+        binding.apply {
+            lifecycleOwner = this@ImageActivity
+        }
         Glide.with(this)
             .load(Utils.getBitmap(img))
-            .into(imageDetail)
+            .into(binding.imageDetail)
     }
 }

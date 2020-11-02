@@ -14,7 +14,7 @@ import com.imaec.notificationhelper.TYPE_CONTENT
 import com.imaec.notificationhelper.TYPE_NAME
 import com.imaec.notificationhelper.Utils
 import com.imaec.notificationhelper.ui.view.activity.DetailActivity
-import com.imaec.notificationhelper.activity.ImageActivity
+import com.imaec.notificationhelper.ui.view.activity.ImageActivity
 import com.imaec.notificationhelper.model.ContentRO
 import com.imaec.notificationhelper.model.NotificationRO
 import kotlinx.android.synthetic.main.item_detail.view.*
