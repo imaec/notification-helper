@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.imaec.notificationhelper.R
-import com.imaec.notificationhelper.adapter.AppAdapter
+import com.imaec.notificationhelper.ui.adapter.AppAdapter
 import com.imaec.notificationhelper.base.BaseFragment
 import com.imaec.notificationhelper.databinding.FragmentSettingBinding
 import com.imaec.notificationhelper.model.AppData
