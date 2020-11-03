@@ -9,13 +9,12 @@ import com.bumptech.glide.Glide
 import com.google.android.gms.ads.*
 import com.imaec.notificationhelper.EndlessRecyclerOnScrollListener
 import com.imaec.notificationhelper.R
-import com.imaec.notificationhelper.adapter.DetailAdapter
+import com.imaec.notificationhelper.ui.adapter.DetailAdapter
 import com.imaec.notificationhelper.base.BaseActivity
 import com.imaec.notificationhelper.databinding.ActivityDetailBinding
 import com.imaec.notificationhelper.model.ContentRO
 import com.imaec.notificationhelper.model.NotificationRO
 import io.realm.Realm
-import kotlinx.android.synthetic.main.activity_detail.*
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -106,7 +105,6 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
                 .equalTo("packageName", packageName)
                 .findFirst()
             realmResult?.let {
-                Log.d(TAG, "    ## ${it.contents}")
                 listItem.addAll(it.contents)
             }
             listItem.reverse()

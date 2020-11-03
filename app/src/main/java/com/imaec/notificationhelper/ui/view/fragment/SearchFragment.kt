@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.imaec.notificationhelper.R
-import com.imaec.notificationhelper.adapter.SearchAdapter
+import com.imaec.notificationhelper.ui.adapter.SearchAdapter
 import com.imaec.notificationhelper.base.BaseFragment
 import com.imaec.notificationhelper.databinding.FragmentSearchBinding
 import com.imaec.notificationhelper.model.ContentRO

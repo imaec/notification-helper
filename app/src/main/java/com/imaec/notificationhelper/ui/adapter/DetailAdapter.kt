@@ -1,4 +1,4 @@
-package com.imaec.notificationhelper.adapter
+package com.imaec.notificationhelper.ui.adapter
 
 import android.annotation.SuppressLint
 import android.content.Intent
