@@ -1,4 +1,4 @@
-package com.yesform.app.util
+package com.imaec.notificationhelper.utils
 
 import android.widget.Toast
 import android.app.Activity

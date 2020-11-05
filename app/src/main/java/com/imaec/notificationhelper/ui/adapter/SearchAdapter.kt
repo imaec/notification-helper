@@ -13,7 +13,7 @@ import com.bumptech.glide.RequestManager
 import com.imaec.notificationhelper.R
 import com.imaec.notificationhelper.TYPE_CONTENT
 import com.imaec.notificationhelper.TYPE_NAME
-import com.imaec.notificationhelper.Utils
+import com.imaec.notificationhelper.utils.Utils
 import com.imaec.notificationhelper.base.BaseAdapter
 import com.imaec.notificationhelper.databinding.ItemDetailBinding
 import com.imaec.notificationhelper.databinding.ItemNotificationBinding

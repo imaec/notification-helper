@@ -9,7 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.imaec.notificationhelper.R
-import com.imaec.notificationhelper.Utils
+import com.imaec.notificationhelper.utils.Utils
 import com.imaec.notificationhelper.base.BaseAdapter
 import com.imaec.notificationhelper.databinding.ItemNotificationBinding
 import com.imaec.notificationhelper.model.NotificationRO

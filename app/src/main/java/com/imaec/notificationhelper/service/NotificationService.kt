@@ -8,13 +8,12 @@ import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.util.Log
 import com.imaec.notificationhelper.ACTION_NOTIFICATION
-import com.imaec.notificationhelper.Utils
+import com.imaec.notificationhelper.utils.Utils
 import com.imaec.notificationhelper.model.ContentData
 import com.imaec.notificationhelper.model.ContentRO
 import com.imaec.notificationhelper.model.NotificationData
 import com.imaec.notificationhelper.model.NotificationRO
 import io.realm.Realm
-import java.io.ByteArrayOutputStream
 
 @SuppressLint("OverrideAbstract")
 class NotificationHelperService : NotificationListenerService() {

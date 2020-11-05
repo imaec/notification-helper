@@ -2,6 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <variable
+            name="notificationViewModel"
+            type="com.imaec.notificationhelper.viewmodel.NotificationViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -9,7 +16,10 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_notification"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:adapter="@{notificationViewModel.adapter}"
+            app:items="@{notificationViewModel.listNotification}"/>
 
         <TextView
             android:id="@+id/text_empty_notification"
@@ -19,6 +29,7 @@
             android:text="@string/msg_empty_notification"
             android:textColor="@android:color/white"
             android:textSize="16sp"
+            app:isVisible="@{notificationViewModel.listNotification.size() == 0}"
             app:layout_constraintTop_toTopOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

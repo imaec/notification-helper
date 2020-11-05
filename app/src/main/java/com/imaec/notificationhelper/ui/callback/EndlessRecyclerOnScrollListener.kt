@@ -1,4 +1,4 @@
-package com.imaec.notificationhelper
+package com.imaec.notificationhelper.ui.callback
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView

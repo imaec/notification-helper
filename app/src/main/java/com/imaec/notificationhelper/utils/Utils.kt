@@ -1,4 +1,4 @@
-package com.imaec.notificationhelper
+package com.imaec.notificationhelper.utils
 
 import android.content.Context
 import android.content.Intent

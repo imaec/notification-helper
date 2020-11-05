@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.gms.ads.*
-import com.imaec.notificationhelper.EndlessRecyclerOnScrollListener
+import com.imaec.notificationhelper.ui.callback.EndlessRecyclerOnScrollListener
 import com.imaec.notificationhelper.R
 import com.imaec.notificationhelper.ui.adapter.DetailAdapter
 import com.imaec.notificationhelper.base.BaseActivity

@@ -26,7 +26,7 @@ import com.imaec.notificationhelper.ui.view.fragment.NotificationFragment
 import com.imaec.notificationhelper.ui.view.fragment.SearchFragment
 import com.imaec.notificationhelper.ui.view.fragment.SettingFragment
 import com.imaec.notificationhelper.service.NotificationHelperService
-import com.yesform.app.util.BackPressHandler
+import com.imaec.notificationhelper.utils.BackPressHandler
 
 class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
