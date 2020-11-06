@@ -9,6 +9,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.imaec.notificationhelper.R
 import com.imaec.notificationhelper.ui.adapter.SearchAdapter
@@ -16,15 +17,15 @@ import com.imaec.notificationhelper.base.BaseFragment
 import com.imaec.notificationhelper.databinding.FragmentSearchBinding
 import com.imaec.notificationhelper.model.ContentRO
 import com.imaec.notificationhelper.model.NotificationRO
+import com.imaec.notificationhelper.repository.NotificationRepository
+import com.imaec.notificationhelper.viewmodel.SearchViewModel
 import io.realm.Realm
 import io.realm.Sort
 import kotlinx.android.synthetic.main.fragment_search.*
 
 class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_search) {
 
-    private val realm by lazy { Realm.getDefaultInstance() }
-    private val adapter by lazy { SearchAdapter(Glide.with(this)) }
-    private val layoutManager = LinearLayoutManager(context)
+    private lateinit var searchViewModel: SearchViewModel
 
     private var method = "name"
 
@@ -35,12 +36,13 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
     }
 
     private fun init() {
+        searchViewModel = SearchViewModel(NotificationRepository(context!!), Glide.with(this))
+
         binding.apply {
             lifecycleOwner = this@SearchFragment
-            recyclerSearch.adapter = adapter
-            recyclerSearch.layoutManager = layoutManager
-            recyclerSearch.addItemDecoration(DividerItemDecoration(context, layoutManager.orientation))
+            searchViewModel = this@SearchFragment.searchViewModel
 
+            recyclerSearch.addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
             radioGroupSearch.setOnCheckedChangeListener { group, checkedId ->
                 when (checkedId) {
                     radio_search_name.id -> {
@@ -51,7 +53,6 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
                     }
                 }
             }
-
             editSearch.setOnEditorActionListener { v, actionId, event ->
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     val keyword = edit_search.text.toString()
@@ -59,7 +60,9 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
                         Toast.makeText(context, "검색어를 입력해주세요.", Toast.LENGTH_SHORT).show()
                         return@setOnEditorActionListener true
                     }
-                    search(keyword)
+                    // search(keyword)
+                    hideKeyboard()
+                    this@SearchFragment.searchViewModel.search(method, keyword)
                     return@setOnEditorActionListener true
                 }
                 false
@@ -70,35 +73,37 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
                     Toast.makeText(context, "검색어를 입력해주세요.", Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
-                search(keyword)
+                // search(keyword)
+                hideKeyboard()
+                this@SearchFragment.searchViewModel.search(method, keyword)
             }
         }
     }
 
-    private fun search(keyword: String) {
-        hideKeyboard()
-        val realmResult = if (method == "name") {
-            realm.where(NotificationRO::class.java)
-                .sort("appName", Sort.ASCENDING)
-                .contains("appName", keyword)
-                .findAll()
-        } else {
-            realm.where(ContentRO::class.java)
-                .sort("pKey", Sort.DESCENDING)
-                .contains("content", keyword)
-                .findAll()
-        }
-
-        adapter.clearItem()
-        if (realmResult.size == 0) {
-            Toast.makeText(context, "검색 결과가 없습니다.", Toast.LENGTH_SHORT).show()
-        } else {
-            realmResult.forEach { content ->
-                adapter.addItem(content)
-            }
-        }
-        adapter.notifyDataSetChanged()
-    }
+//    private fun search(keyword: String) {
+//        hideKeyboard()
+//        val realmResult = if (method == "name") {
+//            realm.where(NotificationRO::class.java)
+//                .sort("appName", Sort.ASCENDING)
+//                .contains("appName", keyword)
+//                .findAll()
+//        } else {
+//            realm.where(ContentRO::class.java)
+//                .sort("pKey", Sort.DESCENDING)
+//                .contains("content", keyword)
+//                .findAll()
+//        }
+//
+//        adapter.clearItem()
+//        if (realmResult.size == 0) {
+//            Toast.makeText(context, "검색 결과가 없습니다.", Toast.LENGTH_SHORT).show()
+//        } else {
+//            realmResult.forEach { content ->
+//                adapter.addItem(content)
+//            }
+//        }
+//        adapter.notifyDataSetChanged()
+//    }
 
     private fun hideKeyboard() {
         try {
