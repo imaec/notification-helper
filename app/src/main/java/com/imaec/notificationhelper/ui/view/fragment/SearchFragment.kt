@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.imaec.notificationhelper.Extensions.getViewModel
 import com.imaec.notificationhelper.R
 import com.imaec.notificationhelper.base.BaseFragment
 import com.imaec.notificationhelper.databinding.FragmentSearchBinding
@@ -28,7 +29,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
     }
 
     private fun init() {
-        searchViewModel = SearchViewModel(NotificationRepository(context!!), Glide.with(this))
+        searchViewModel = getViewModel { SearchViewModel(NotificationRepository(context!!), Glide.with(this)) }
 
         binding.apply {
             lifecycleOwner = this@SearchFragment

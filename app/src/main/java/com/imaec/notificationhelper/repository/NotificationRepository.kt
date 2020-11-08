@@ -2,6 +2,7 @@ package com.imaec.notificationhelper.repository
 
 import android.content.Context
 import android.widget.Toast
+import com.imaec.notificationhelper.model.AppData
 import com.imaec.notificationhelper.model.ContentRO
 import com.imaec.notificationhelper.model.IgnoreRO
 import com.imaec.notificationhelper.model.NotificationRO
@@ -53,5 +54,22 @@ class NotificationRepository(
             }
         }
         return listTemp
+    }
+
+    fun setIgnore(listItem: List<AppData>, position: Int, isSelected: Boolean) {
+        realm.executeTransaction {
+            val realmResult = realm.where(IgnoreRO::class.java)
+                .equalTo("packageName", listItem[position].packageName)
+                .findFirst()
+            if (isSelected) {
+                // 저장
+                it.createObject(IgnoreRO::class.java).apply {
+                    packageName = listItem[position].packageName
+                }
+            } else {
+                // 삭제
+                realmResult?.deleteFromRealm()
+            }
+        }
     }
 }

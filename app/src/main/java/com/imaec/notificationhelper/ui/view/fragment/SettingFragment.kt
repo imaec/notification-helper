@@ -7,15 +7,20 @@ import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.imaec.notificationhelper.Extensions.getViewModel
 import com.imaec.notificationhelper.R
 import com.imaec.notificationhelper.ui.adapter.AppAdapter
 import com.imaec.notificationhelper.base.BaseFragment
 import com.imaec.notificationhelper.databinding.FragmentSettingBinding
 import com.imaec.notificationhelper.model.AppData
 import com.imaec.notificationhelper.model.IgnoreRO
+import com.imaec.notificationhelper.repository.NotificationRepository
+import com.imaec.notificationhelper.viewmodel.SettingViewModel
 import io.realm.Realm
 
 class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_setting) {
+
+    private lateinit var settingViewModel: SettingViewModel
 
     private val realm by lazy { Realm.getDefaultInstance() }
     private val adapter by lazy { AppAdapter(Glide.with(this), callback) }
@@ -24,7 +29,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
 
     private val callback = object : IgnoreCallback {
         override fun onIgnore(position: Int, isSelected: Boolean) {
-            setIgnore(position, isSelected)
+            settingViewModel.setIgnore(position, isSelected)
         }
     }
 
@@ -37,6 +42,8 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
     }
 
     private fun init() {
+        settingViewModel = getViewModel { SettingViewModel(NotificationRepository(context!!)) }
+
         binding.apply {
             lifecycleOwner = this@SettingFragment
             recyclerSetting.adapter = adapter
@@ -50,6 +57,18 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
             addCategory(Intent.CATEGORY_LAUNCHER)
         }
         listApps = context!!.packageManager.queryIntentActivities(intent, 0)
+
+        val listApp = ArrayList<AppData>()
+        context!!.packageManager.queryIntentActivities(intent, 0).forEach { app ->
+            listApp.add(AppData().apply {
+                icon = context!!.packageManager.getApplicationIcon(app.activityInfo.packageName)
+                packageName = app.activityInfo.packageName
+                name = app.activityInfo.loadLabel(context!!.packageManager).toString()
+            })
+        }
+        settingViewModel.setListApp(listApp)
+
+
         val realmResult = realm.where(IgnoreRO::class.java).findAll()
 
         for (app in listApps) {
@@ -65,23 +84,23 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
         adapter.notifyDataSetChanged()
     }
 
-    private fun setIgnore(position: Int, isSelected: Boolean) {
-        val listItem = adapter.getItem()
-        realm.executeTransaction {
-            val realmResult = realm.where(IgnoreRO::class.java)
-                .equalTo("packageName", listItem[position].packageName)
-                .findFirst()
-            if (isSelected) {
-                // 저장
-                it.createObject(IgnoreRO::class.java).apply {
-                    packageName = listItem[position].packageName
-                }
-            } else {
-                // 삭제
-                realmResult?.deleteFromRealm()
-            }
-        }
-    }
+//    private fun setIgnore(position: Int, isSelected: Boolean) {
+//        val listItem = adapter.getItem()
+//        realm.executeTransaction {
+//            val realmResult = realm.where(IgnoreRO::class.java)
+//                .equalTo("packageName", listItem[position].packageName)
+//                .findFirst()
+//            if (isSelected) {
+//                // 저장
+//                it.createObject(IgnoreRO::class.java).apply {
+//                    packageName = listItem[position].packageName
+//                }
+//            } else {
+//                // 삭제
+//                realmResult?.deleteFromRealm()
+//            }
+//        }
+//    }
 
     interface IgnoreCallback {
         fun onIgnore(position: Int, isSelected: Boolean)
