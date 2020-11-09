@@ -17,7 +17,7 @@ import com.imaec.notificationhelper.model.IgnoreRO
 import com.imaec.notificationhelper.ui.view.fragment.SettingFragment
 import io.realm.RealmResults
 
-class AppAdapter(val glide: RequestManager, val callback: SettingFragment.IgnoreCallback) : BaseAdapter() {
+class AppAdapter(val glide: RequestManager, val callback: (position: Int, isSelected: Boolean) -> Unit) : BaseAdapter() {
 
     private val selectedItems = SparseBooleanArray()
 
@@ -45,7 +45,6 @@ class AppAdapter(val glide: RequestManager, val callback: SettingFragment.Ignore
                 .into(imageIcon)
 
             textName.text = item.name
-            Log.d(TAG, "    ## name : ${item.name}")
 
             if (selectedItems.get(position, false)) {
                 itemView.setBackgroundColor(ContextCompat.getColor(binding.root.context, android.R.color.white))
@@ -61,21 +60,8 @@ class AppAdapter(val glide: RequestManager, val callback: SettingFragment.Ignore
 
                 notifyItemChanged(position)
 
-                callback.onIgnore(position, selectedItems.get(position))
+                callback(position, selectedItems.get(position))
             }
-        }
-    }
-
-    fun addItem(item: AppData) {
-        listItem.add(item)
-    }
-
-    fun sort() {
-        val listTemp = listItem.sortedBy { if (it is AppData) it.name else null }
-//        val listTemp = listItem.sortedWith(compareBy { it.name })
-        listItem.clear()
-        listTemp.forEach {
-            listItem.add(it)
         }
     }
 
@@ -89,13 +75,5 @@ class AppAdapter(val glide: RequestManager, val callback: SettingFragment.Ignore
                 }
             }
         }
-    }
-
-    fun getItem(): ArrayList<AppData> {
-        val listTemp = arrayListOf<AppData>()
-        listItem.forEach {
-            if (it is AppData) listTemp.add(it)
-        }
-        return listTemp
     }
 }

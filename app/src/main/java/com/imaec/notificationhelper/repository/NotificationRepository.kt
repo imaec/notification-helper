@@ -7,6 +7,7 @@ import com.imaec.notificationhelper.model.ContentRO
 import com.imaec.notificationhelper.model.IgnoreRO
 import com.imaec.notificationhelper.model.NotificationRO
 import io.realm.Realm
+import io.realm.RealmResults
 import io.realm.Sort
 
 class NotificationRepository(
@@ -54,6 +55,10 @@ class NotificationRepository(
             }
         }
         return listTemp
+    }
+
+    fun getIgnore(): RealmResults<IgnoreRO> {
+        return realm.where(IgnoreRO::class.java).findAll()
     }
 
     fun setIgnore(listItem: List<AppData>, position: Int, isSelected: Boolean) {
