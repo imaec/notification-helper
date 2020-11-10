@@ -1,9 +1,13 @@
 package com.imaec.notificationhelper
 
 import android.view.View
+import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.imaec.notificationhelper.base.BaseAdapter
+import com.imaec.notificationhelper.utils.Utils
 
 object BindingAdapters {
 
@@ -13,6 +17,23 @@ object BindingAdapters {
     @BindingAdapter("app:isVisible")
     fun isVisible(view: View, isVisible: Boolean) {
         view.visibility = if (isVisible) View.VISIBLE else View.GONE
+    }
+
+    @JvmStatic
+    @BindingAdapter("imgUrl")
+    fun setImgUrl(imageView: ImageView, imgUrl: String) {
+        Glide.with(imageView)
+            .load(imgUrl)
+            .error(R.mipmap.ic_launcher)
+            .into(imageView)
+    }
+
+    @JvmStatic
+    @BindingAdapter("packageName")
+    fun setImage(imageView: ImageView, packageName: String) {
+        Glide.with(imageView)
+            .load(Utils.getAppIcon(imageView.context, packageName) ?: ContextCompat.getDrawable(imageView.context, R.mipmap.ic_launcher))
+            .into(imageView)
     }
 
     @JvmStatic

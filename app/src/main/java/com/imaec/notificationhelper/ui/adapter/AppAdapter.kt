@@ -1,6 +1,5 @@
 package com.imaec.notificationhelper.ui.adapter
 
-import android.util.Log
 import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -14,10 +13,12 @@ import com.imaec.notificationhelper.base.BaseAdapter
 import com.imaec.notificationhelper.databinding.ItemAppBinding
 import com.imaec.notificationhelper.model.AppData
 import com.imaec.notificationhelper.model.IgnoreRO
-import com.imaec.notificationhelper.ui.view.fragment.SettingFragment
 import io.realm.RealmResults
 
-class AppAdapter(val glide: RequestManager, val callback: (position: Int, isSelected: Boolean) -> Unit) : BaseAdapter() {
+class AppAdapter(
+    val glide: RequestManager,
+    val callback: (position: Int, isSelected: Boolean) -> Unit
+) : BaseAdapter() {
 
     private val selectedItems = SparseBooleanArray()
 
@@ -66,11 +67,11 @@ class AppAdapter(val glide: RequestManager, val callback: (position: Int, isSele
     }
 
     fun setSelectedItems(listSelectedItems: RealmResults<IgnoreRO>) {
-        listItem.forEach { app ->
-            if (app is AppData) {
+        listItem.forEach { item ->
+            if (item is AppData) {
                 listSelectedItems.forEach {
-                    if (app.packageName == it.packageName) {
-                        selectedItems.put(listItem.indexOf(app), true)
+                    if (item.packageName == it.packageName) {
+                        selectedItems.put(listItem.indexOf(item), true)
                     }
                 }
             }
