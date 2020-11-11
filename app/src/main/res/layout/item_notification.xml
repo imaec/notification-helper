@@ -34,7 +34,7 @@
             android:background="@drawable/bg_icon"
             android:padding="8dp"
             android:src="@mipmap/ic_launcher"
-            app:packageName="@{item.packageName}"
+            app:image="@{item.packageName}"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 

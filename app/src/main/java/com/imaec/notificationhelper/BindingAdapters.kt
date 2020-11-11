@@ -29,10 +29,19 @@ object BindingAdapters {
     }
 
     @JvmStatic
-    @BindingAdapter("packageName")
+    @BindingAdapter("image")
     fun setImage(imageView: ImageView, packageName: String) {
         Glide.with(imageView)
             .load(Utils.getAppIcon(imageView.context, packageName) ?: ContextCompat.getDrawable(imageView.context, R.mipmap.ic_launcher))
+            .into(imageView)
+    }
+
+    @JvmStatic
+    @BindingAdapter("image")
+    fun setImage(imageView: ImageView, bytes: ByteArray?) {
+        val bitmap = Utils.getBitmap(bytes)
+        Glide.with(imageView)
+            .load(bitmap ?: 0)
             .into(imageView)
     }
 

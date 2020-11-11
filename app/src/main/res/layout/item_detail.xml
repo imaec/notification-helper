@@ -2,6 +2,17 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <variable
+            name="item"
+            type="com.imaec.notificationhelper.model.ContentRO" />
+
+        <variable
+            name="sdf"
+            type="java.text.SimpleDateFormat" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,6 +32,7 @@
             android:layout_height="50dp"
             android:background="@drawable/bg_icon"
             android:padding="8dp"
+            app:image="@{item.img}"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
@@ -40,6 +52,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
+                android:text="@{item.title}"
                 android:textColor="@android:color/white"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -49,7 +62,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginTop="4dp"
-                android:scaleType="fitStart" />
+                android:scaleType="fitStart"
+                app:image="@{item.img2}"
+                app:isVisible="@{item.img2 != null}"/>
 
             <TextView
                 android:id="@+id/text_item_content"
@@ -58,6 +73,7 @@
                 android:layout_marginTop="4dp"
                 android:ellipsize="end"
                 android:maxLines="4"
+                android:text="@{item.content}"
                 android:textColor="@android:color/white"
                 android:textSize="14sp" />
 
@@ -66,6 +82,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:text='@{sdf.format(item.pKey)}'
                 android:textColor="@android:color/white"
                 android:textSize="12sp" />
         </LinearLayout>

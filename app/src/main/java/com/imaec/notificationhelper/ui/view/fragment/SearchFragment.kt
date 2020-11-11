@@ -1,5 +1,7 @@
 package com.imaec.notificationhelper.ui.view.fragment
 
+import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -12,6 +14,8 @@ import com.imaec.notificationhelper.R
 import com.imaec.notificationhelper.base.BaseFragment
 import com.imaec.notificationhelper.databinding.FragmentSearchBinding
 import com.imaec.notificationhelper.repository.NotificationRepository
+import com.imaec.notificationhelper.ui.view.activity.DetailActivity
+import com.imaec.notificationhelper.ui.view.activity.ImageActivity
 import com.imaec.notificationhelper.utils.KeyboardUtil
 import com.imaec.notificationhelper.viewmodel.SearchViewModel
 import kotlinx.android.synthetic.main.fragment_search.*
@@ -29,7 +33,29 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
     }
 
     private fun init() {
-        searchViewModel = getViewModel { SearchViewModel(NotificationRepository(context!!), Glide.with(this)) }
+        searchViewModel = getViewModel {
+            SearchViewModel(NotificationRepository(context!!), {
+                startActivity(Intent(context, DetailActivity::class.java).apply {
+                    putExtra("packageName", it.packageName)
+                })
+            }, { item, isImage ->
+                if (isImage) {
+                    startActivity(Intent(context, ImageActivity::class.java).apply {
+                        putExtra("img", item.img2)
+                    })
+                } else {
+                    AlertDialog.Builder(binding.root.context).apply {
+                        setTitle(item.title)
+                        setMessage(item.content)
+                        setPositiveButton("확인") { dialog, which ->
+                            dialog.dismiss()
+                        }
+                        create()
+                        show()
+                    }
+                }
+            })
+        }
 
         binding.apply {
             lifecycleOwner = this@SearchFragment

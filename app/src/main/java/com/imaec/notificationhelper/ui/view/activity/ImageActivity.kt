@@ -18,7 +18,7 @@ class ImageActivity : BaseActivity<ActivityImageBinding>(R.layout.activity_image
     }
 
     private fun init() {
-        img = intent.getByteArrayExtra("img")
+        img = intent.getByteArrayExtra("img")!!
         binding.apply {
             lifecycleOwner = this@ImageActivity
         }
