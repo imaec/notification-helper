@@ -1,5 +1,6 @@
 package com.imaec.notificationhelper
 
+import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
@@ -25,6 +26,14 @@ object BindingAdapters {
         Glide.with(imageView)
             .load(imgUrl)
             .error(R.mipmap.ic_launcher)
+            .into(imageView)
+    }
+
+    @JvmStatic
+    @BindingAdapter("image")
+    fun setImage(imageView: ImageView, image: Drawable) {
+        Glide.with(imageView)
+            .load(image)
             .into(imageView)
     }
 

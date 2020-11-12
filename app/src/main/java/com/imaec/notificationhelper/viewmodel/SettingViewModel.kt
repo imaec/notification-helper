@@ -13,12 +13,11 @@ import io.realm.RealmResults
 
 @Suppress("UNCHECKED_CAST")
 class SettingViewModel(
-    private val repository: NotificationRepository,
-    glide: RequestManager
+    private val repository: NotificationRepository
 ) : BaseViewModel() {
 
     init {
-        adapter = AppAdapter(glide) { position, isSelected ->
+        adapter = AppAdapter { position, isSelected ->
             repository.setIgnore(_listApp.value as List<AppData>, position, isSelected)
         }
     }

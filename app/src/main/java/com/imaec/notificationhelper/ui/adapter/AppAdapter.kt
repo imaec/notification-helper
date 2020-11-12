@@ -16,7 +16,6 @@ import com.imaec.notificationhelper.model.IgnoreRO
 import io.realm.RealmResults
 
 class AppAdapter(
-    val glide: RequestManager,
     val callback: (position: Int, isSelected: Boolean) -> Unit
 ) : BaseAdapter() {
 
@@ -37,25 +36,21 @@ class AppAdapter(
 
     inner class ItemViewHolder(val binding: ItemAppBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        private val imageIcon by lazy { binding.root.findViewById<ImageView>(R.id.image_item_icon) }
-        private val textName by lazy { binding.root.findViewById<TextView>(R.id.text_item_name) }
-
         fun onBind(item: AppData, position: Int) {
-            glide
-                .load(item.icon)
-                .into(imageIcon)
+            binding.apply {
+                this.item = item
 
-            textName.text = item.name
-
-            if (selectedItems.get(position, false)) {
-                itemView.setBackgroundColor(ContextCompat.getColor(binding.root.context, android.R.color.white))
-                textName.setTextColor(ContextCompat.getColor(binding.root.context, R.color.colorPrimary))
-            } else {
-                itemView.setBackgroundColor(ContextCompat.getColor(binding.root.context, R.color.colorPrimary))
-                textName.setTextColor(ContextCompat.getColor(binding.root.context, android.R.color.white))
+                itemView.setBackgroundColor(ContextCompat.getColor(binding.root.context, if (selectedItems.get(position, false)) android.R.color.white else R.color.colorPrimary))
+                textItemName.setTextColor(ContextCompat.getColor(binding.root.context, if (selectedItems.get(position, false)) R.color.colorPrimary else android.R.color.white))
             }
+//            glide
+//                .load(item.icon)
+//                .into(imageIcon)
 
-            binding.root.setOnClickListener {
+//            textName.text = item.name
+
+
+            itemView.setOnClickListener {
                 if (selectedItems.get(position)) selectedItems.delete(position)
                 else selectedItems.put(position, true)
 
@@ -63,6 +58,14 @@ class AppAdapter(
 
                 callback(position, selectedItems.get(position))
             }
+//            binding.root.setOnClickListener {
+//                if (selectedItems.get(position)) selectedItems.delete(position)
+//                else selectedItems.put(position, true)
+//
+//                notifyItemChanged(position)
+//
+//                callback(position, selectedItems.get(position))
+//            }
         }
     }
 

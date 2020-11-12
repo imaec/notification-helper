@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.imaec.notificationhelper.Extensions.getViewModel
 import com.imaec.notificationhelper.R
 import com.imaec.notificationhelper.base.BaseFragment
@@ -25,7 +24,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
     }
 
     private fun init() {
-        settingViewModel = getViewModel { SettingViewModel(NotificationRepository(context!!), Glide.with(this)) }
+        settingViewModel = getViewModel { SettingViewModel(NotificationRepository(context!!)) }
 
         binding.apply {
             lifecycleOwner = this@SettingFragment
