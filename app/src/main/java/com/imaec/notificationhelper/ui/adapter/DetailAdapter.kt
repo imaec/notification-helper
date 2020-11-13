@@ -17,7 +17,9 @@ import com.imaec.notificationhelper.databinding.ItemDetailBinding
 import com.imaec.notificationhelper.model.ContentRO
 import java.text.SimpleDateFormat
 
-class DetailAdapter(val glide: RequestManager) : BaseAdapter() {
+class DetailAdapter(
+    private val onClickContent: (ContentRO, Boolean) -> Unit
+) : BaseAdapter() {
 
     private lateinit var packageName: String
 
@@ -36,46 +38,51 @@ class DetailAdapter(val glide: RequestManager) : BaseAdapter() {
 
     inner class ItemViewHolder(val binding: ItemDetailBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        private val imageIcon by lazy { binding.root.findViewById<ImageView>(R.id.image_item_detail_icon) }
-        private val textTitle by lazy { binding.root.findViewById<TextView>(R.id.text_item_title) }
-        private val imageContent by lazy { binding.root.findViewById<ImageView>(R.id.image_item_content) }
-        private val textContent by lazy { binding.root.findViewById<TextView>(R.id.text_item_content) }
-        private val textTime by lazy { binding.root.findViewById<TextView>(R.id.text_item_time) }
-
         @SuppressLint("SimpleDateFormat")
         fun onBind(item: ContentRO) {
-            val bitmap = Utils.getBitmap(item.img)
-            val bitmap2 = Utils.getBitmap(item.img2)
-            bitmap?.let {
-                glide
-                    .load(bitmap)
-                    .into(imageIcon)
-            } ?: run {
-                glide
-                    .load(Utils.getAppIcon(binding.root.context, packageName))
-                    .into(imageIcon)
-            }
-            bitmap2?.let {
-                imageContent.visibility = View.VISIBLE
-                glide
-                    .load(bitmap2)
-                    .into(imageContent)
-            } ?: run {
-                imageContent.visibility = View.GONE
-            }
-            textTitle.text = item.title
-            textContent.text = item.content
-            textTime.text = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(item.pKey)
+            binding.apply {
+                this.item = item
 
-            binding.root.setOnClickListener {
-                onClick(item)
+                imageItemContent.setOnClickListener {
+                    onClickContent(item, true)
+                }
             }
 
-            imageContent.setOnClickListener {
-                binding.root.context.startActivity(Intent(binding.root.context, ImageActivity::class.java).apply {
-                    putExtra("img", item.img2)
-                })
+            itemView.setOnClickListener {
+                onClickContent(item, false)
             }
+//            val bitmap = Utils.getBitmap(item.img)
+//            val bitmap2 = Utils.getBitmap(item.img2)
+//            bitmap?.let {
+//                glide
+//                    .load(bitmap)
+//                    .into(imageIcon)
+//            } ?: run {
+//                glide
+//                    .load(Utils.getAppIcon(binding.root.context, packageName))
+//                    .into(imageIcon)
+//            }
+//            bitmap2?.let {
+//                imageContent.visibility = View.VISIBLE
+//                glide
+//                    .load(bitmap2)
+//                    .into(imageContent)
+//            } ?: run {
+//                imageContent.visibility = View.GONE
+//            }
+//            textTitle.text = item.title
+//            textContent.text = item.content
+//            textTime.text = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(item.pKey)
+
+//            binding.root.setOnClickListener {
+//                onClick(item)
+//            }
+//
+//            imageContent.setOnClickListener {
+//                binding.root.context.startActivity(Intent(binding.root.context, ImageActivity::class.java).apply {
+//                    putExtra("img", item.img2)
+//                })
+//            }
         }
     }
 

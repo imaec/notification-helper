@@ -1,5 +1,6 @@
 package com.imaec.notificationhelper.ui.view.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
@@ -21,7 +22,23 @@ import kotlin.collections.ArrayList
 class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_detail) {
 
     private val realm by lazy { Realm.getDefaultInstance() }
-    private val adapter by lazy { DetailAdapter(Glide.with(this)) }
+    private val adapter by lazy { DetailAdapter { item, isImage ->
+        if (isImage) {
+            startActivity(Intent(this, ImageActivity::class.java).apply {
+                putExtra("img", item.img2)
+            })
+        } else {
+            android.app.AlertDialog.Builder(binding.root.context).apply {
+                setTitle(item.title)
+                setMessage(item.content)
+                setPositiveButton("확인") { dialog, which ->
+                    dialog.dismiss()
+                }
+                create()
+                show()
+            }
+        }
+    } }
     private val layoutManager = LinearLayoutManager(this)
 
     private val listItem = ArrayList<ContentRO>()
