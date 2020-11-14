@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:ads="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="detailViewModel"
+            type="com.imaec.notificationhelper.viewmodel.DetailViewModel" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -11,8 +19,10 @@
             android:id="@+id/recycler_detail"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            ads:layout_constraintTop_toTopOf="parent"
-            ads:layout_constraintBottom_toTopOf="@id/ad_detail"/>
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:adapter="@{detailViewModel.adapter}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/ad_detail"/>
 
         <com.google.android.gms.ads.AdView
             android:id="@+id/ad_detail"

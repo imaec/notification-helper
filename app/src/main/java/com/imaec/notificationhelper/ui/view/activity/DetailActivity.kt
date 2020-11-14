@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.gms.ads.*
+import com.imaec.notificationhelper.Extensions.getViewModel
 import com.imaec.notificationhelper.ui.callback.EndlessRecyclerOnScrollListener
 import com.imaec.notificationhelper.R
 import com.imaec.notificationhelper.ui.adapter.DetailAdapter
@@ -15,30 +16,16 @@ import com.imaec.notificationhelper.base.BaseActivity
 import com.imaec.notificationhelper.databinding.ActivityDetailBinding
 import com.imaec.notificationhelper.model.ContentRO
 import com.imaec.notificationhelper.model.NotificationRO
+import com.imaec.notificationhelper.viewmodel.DetailViewModel
 import io.realm.Realm
 import java.util.*
 import kotlin.collections.ArrayList
 
 class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_detail) {
 
+    private lateinit var detailViewModel: DetailViewModel
+
     private val realm by lazy { Realm.getDefaultInstance() }
-    private val adapter by lazy { DetailAdapter { item, isImage ->
-        if (isImage) {
-            startActivity(Intent(this, ImageActivity::class.java).apply {
-                putExtra("img", item.img2)
-            })
-        } else {
-            android.app.AlertDialog.Builder(binding.root.context).apply {
-                setTitle(item.title)
-                setMessage(item.content)
-                setPositiveButton("확인") { dialog, which ->
-                    dialog.dismiss()
-                }
-                create()
-                show()
-            }
-        }
-    } }
     private val layoutManager = LinearLayoutManager(this)
 
     private val listItem = ArrayList<ContentRO>()
@@ -52,20 +39,6 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
         adInit()
 
         init()
-
-        adapter.addOnClickListener { item ->
-            if (item is ContentRO) {
-                AlertDialog.Builder(this).apply {
-                    setTitle(item.title)
-                    setMessage(item.content)
-                    setPositiveButton("확인") { dialog, which ->
-                        dialog.dismiss()
-                    }
-                    create()
-                    show()
-                }
-            }
-        }
     }
 
     private fun adInit() {
@@ -94,11 +67,31 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
     }
 
     private fun init() {
+        detailViewModel = getViewModel {
+            DetailViewModel({ item, isImage ->
+                if (isImage) {
+                    startActivity(Intent(this, ImageActivity::class.java).apply {
+                        putExtra("img", item.img2)
+                    })
+                } else {
+                    android.app.AlertDialog.Builder(binding.root.context).apply {
+                        setTitle(item.title)
+                        setMessage(item.content)
+                        setPositiveButton("확인") { dialog, which ->
+                            dialog.dismiss()
+                        }
+                        create()
+                        show()
+                    }
+                }
+            })
+        }
+
         binding.apply {
             lifecycleOwner = this@DetailActivity
+            detailViewModel = this@DetailActivity.detailViewModel
+
             recyclerDetail.apply {
-                adapter = this@DetailActivity.adapter
-                layoutManager = this@DetailActivity.layoutManager
                 addItemDecoration(DividerItemDecoration(this@DetailActivity, this@DetailActivity.layoutManager.orientation))
                 addOnScrollListener(object : EndlessRecyclerOnScrollListener(this@DetailActivity.layoutManager) {
                     override fun onLoadMore(current_page: Int) {
@@ -109,12 +102,12 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
             }
         }
 
-        getData()
+        showProgress()
+        showAd()
+        detailViewModel.getData()
     }
 
     private fun getData() {
-        showProgress()
-        showAd()
         if (listItem.size == 0) {
             val packageName = intent.getStringExtra("packageName")
             adapter.setPackageName(packageName)
