@@ -51,38 +51,6 @@ class DetailAdapter(
             itemView.setOnClickListener {
                 onClickContent(item, false)
             }
-//            val bitmap = Utils.getBitmap(item.img)
-//            val bitmap2 = Utils.getBitmap(item.img2)
-//            bitmap?.let {
-//                glide
-//                    .load(bitmap)
-//                    .into(imageIcon)
-//            } ?: run {
-//                glide
-//                    .load(Utils.getAppIcon(binding.root.context, packageName))
-//                    .into(imageIcon)
-//            }
-//            bitmap2?.let {
-//                imageContent.visibility = View.VISIBLE
-//                glide
-//                    .load(bitmap2)
-//                    .into(imageContent)
-//            } ?: run {
-//                imageContent.visibility = View.GONE
-//            }
-//            textTitle.text = item.title
-//            textContent.text = item.content
-//            textTime.text = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(item.pKey)
-
-//            binding.root.setOnClickListener {
-//                onClick(item)
-//            }
-//
-//            imageContent.setOnClickListener {
-//                binding.root.context.startActivity(Intent(binding.root.context, ImageActivity::class.java).apply {
-//                    putExtra("img", item.img2)
-//                })
-//            }
         }
     }
 

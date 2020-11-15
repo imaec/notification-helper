@@ -33,6 +33,17 @@ class NotificationRepository(
         return listTemp
     }
 
+    fun getContents(packageName: String): List<ContentRO> {
+        val listItem = ArrayList<ContentRO>()
+        val realmResult = realm.where(NotificationRO::class.java)
+            .equalTo("packageName", packageName)
+            .findFirst()
+        realmResult?.let {
+            listItem.addAll(it.contents)
+        }
+        return listItem.reversed()
+    }
+
     fun search(method: String, keyword: String): List<Any> {
         val realmResult = if (method == "name") {
             realm.where(NotificationRO::class.java)

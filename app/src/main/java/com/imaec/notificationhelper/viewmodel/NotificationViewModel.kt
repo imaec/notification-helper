@@ -20,6 +20,5 @@ class NotificationViewModel(
 
     fun getNotifications() {
         _listNotification.value = repository.getNotifications() as ArrayList<Any>
-
     }
 }

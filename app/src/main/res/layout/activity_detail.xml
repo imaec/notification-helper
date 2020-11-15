@@ -21,6 +21,7 @@
             android:layout_height="0dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:adapter="@{detailViewModel.adapter}"
+            app:items="@{detailViewModel.listContent}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/ad_detail"/>
 

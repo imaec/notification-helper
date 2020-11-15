@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.gms.ads.*
 import com.imaec.notificationhelper.Extensions.getViewModel
@@ -16,6 +17,7 @@ import com.imaec.notificationhelper.base.BaseActivity
 import com.imaec.notificationhelper.databinding.ActivityDetailBinding
 import com.imaec.notificationhelper.model.ContentRO
 import com.imaec.notificationhelper.model.NotificationRO
+import com.imaec.notificationhelper.repository.NotificationRepository
 import com.imaec.notificationhelper.viewmodel.DetailViewModel
 import io.realm.Realm
 import java.util.*
@@ -25,12 +27,9 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
 
     private lateinit var detailViewModel: DetailViewModel
 
-    private val realm by lazy { Realm.getDefaultInstance() }
     private val layoutManager = LinearLayoutManager(this)
 
-    private val listItem = ArrayList<ContentRO>()
     private var currentPage = 1
-    private val count = 30
     private var i = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,7 +67,7 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
 
     private fun init() {
         detailViewModel = getViewModel {
-            DetailViewModel({ item, isImage ->
+            DetailViewModel(NotificationRepository(this), intent.getStringExtra("packageName")!!) { item, isImage ->
                 if (isImage) {
                     startActivity(Intent(this, ImageActivity::class.java).apply {
                         putExtra("img", item.img2)
@@ -84,7 +83,7 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
                         show()
                     }
                 }
-            })
+            }
         }
 
         binding.apply {
@@ -92,11 +91,10 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
             detailViewModel = this@DetailActivity.detailViewModel
 
             recyclerDetail.apply {
-                addItemDecoration(DividerItemDecoration(this@DetailActivity, this@DetailActivity.layoutManager.orientation))
+                addItemDecoration(DividerItemDecoration(this@DetailActivity, RecyclerView.VERTICAL))
                 addOnScrollListener(object : EndlessRecyclerOnScrollListener(this@DetailActivity.layoutManager) {
                     override fun onLoadMore(current_page: Int) {
                         currentPage = current_page + 1
-                        getData()
                     }
                 })
             }
@@ -105,25 +103,6 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
         showProgress()
         showAd()
         detailViewModel.getData()
-    }
-
-    private fun getData() {
-        if (listItem.size == 0) {
-            val packageName = intent.getStringExtra("packageName")
-            adapter.setPackageName(packageName)
-            val realmResult = realm.where(NotificationRO::class.java)
-                .equalTo("packageName", packageName)
-                .findFirst()
-            realmResult?.let {
-                listItem.addAll(it.contents)
-            }
-            listItem.reverse()
-        }
-
-        for (i in (currentPage-1)*count until currentPage*count) {
-            if (listItem.size > i) adapter.addItem(listItem[i])
-        }
-        adapter.notifyDataSetChanged()
     }
 
     private fun showAd() {
