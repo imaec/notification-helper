@@ -9,6 +9,10 @@
             type="com.imaec.notificationhelper.model.ContentRO" />
 
         <variable
+            name="packageName"
+            type="String" />
+
+        <variable
             name="sdf"
             type="java.text.SimpleDateFormat" />
     </data>
@@ -33,6 +37,7 @@
             android:background="@drawable/bg_icon"
             android:padding="8dp"
             app:image="@{item.img}"
+            app:packageName="@{packageName}"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 

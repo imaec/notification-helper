@@ -2,6 +2,7 @@ package com.imaec.notificationhelper.ui.adapter
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,6 +43,7 @@ class DetailAdapter(
         fun onBind(item: ContentRO) {
             binding.apply {
                 this.item = item
+                this.packageName = this@DetailAdapter.packageName
 
                 imageItemContent.setOnClickListener {
                     onClickContent(item, true)
@@ -55,6 +57,7 @@ class DetailAdapter(
     }
 
     fun setPackageName(packageName: String) {
+        Log.d(TAG, "    ## packageName : $packageName")
         this.packageName = packageName
     }
 }

@@ -32,9 +32,9 @@ class Utils {
             return ""
         }
 
-        fun getAppIcon(context: Context, packageName: String): Drawable? {
+        fun getAppIcon(context: Context, packageName: String?): Drawable? {
             return try {
-                context.packageManager.getApplicationIcon(packageName)
+                context.packageManager.getApplicationIcon(packageName ?: "")
             } catch (e: PackageManager.NameNotFoundException) {
                 null
             }
