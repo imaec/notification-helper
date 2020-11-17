@@ -4,8 +4,8 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.imaec.notificationhelper.TYPE_CONTENT
-import com.imaec.notificationhelper.TYPE_NAME
+import com.imaec.notificationhelper.ItemType.TYPE_CONTENT
+import com.imaec.notificationhelper.ItemType.TYPE_NAME
 import com.imaec.notificationhelper.base.BaseAdapter
 import com.imaec.notificationhelper.databinding.ItemDetailBinding
 import com.imaec.notificationhelper.databinding.ItemNotificationBinding

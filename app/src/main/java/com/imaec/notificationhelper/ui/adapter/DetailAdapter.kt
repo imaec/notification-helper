@@ -57,7 +57,6 @@ class DetailAdapter(
     }
 
     fun setPackageName(packageName: String) {
-        Log.d(TAG, "    ## packageName : $packageName")
         this.packageName = packageName
     }
 }

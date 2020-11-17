@@ -23,7 +23,6 @@ class Utils {
             listApps = pkgMgr.queryIntentActivities(intent, 0)
 
             for (app in listApps) {
-                // Log.d("app :::: ", "${app.activityInfo.loadLabel(pkgMgr)} / ${app.activityInfo.packageName}")
                 if (app.activityInfo.packageName == packageName) {
                     return app.activityInfo.loadLabel(pkgMgr).toString()
                 }

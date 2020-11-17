@@ -43,12 +43,6 @@ class AppAdapter(
                 itemView.setBackgroundColor(ContextCompat.getColor(binding.root.context, if (selectedItems.get(position, false)) android.R.color.white else R.color.colorPrimary))
                 textItemName.setTextColor(ContextCompat.getColor(binding.root.context, if (selectedItems.get(position, false)) R.color.colorPrimary else android.R.color.white))
             }
-//            glide
-//                .load(item.icon)
-//                .into(imageIcon)
-
-//            textName.text = item.name
-
 
             itemView.setOnClickListener {
                 if (selectedItems.get(position)) selectedItems.delete(position)
@@ -58,14 +52,6 @@ class AppAdapter(
 
                 callback(position, selectedItems.get(position))
             }
-//            binding.root.setOnClickListener {
-//                if (selectedItems.get(position)) selectedItems.delete(position)
-//                else selectedItems.put(position, true)
-//
-//                notifyItemChanged(position)
-//
-//                callback(position, selectedItems.get(position))
-//            }
         }
     }
 

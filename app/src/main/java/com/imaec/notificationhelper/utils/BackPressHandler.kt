@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
  */
 class BackPressHandler(private val activity: AppCompatActivity) {
 
-    var backKeyPressedTime: Long = 0
+    private var backKeyPressedTime: Long = 0
     private var toast: Toast? = null
 
     fun onBackPressed() {
