@@ -131,7 +131,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
             override fun onReceive(context: Context, intent: Intent) {
                 if (intent.action == ACTION_NOTIFICATION) {
                     // Notification을 받으면
-
                 }
             }
         }

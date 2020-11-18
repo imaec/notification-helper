@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.app.Notification
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.drawable.Icon
+import android.os.Parcelable
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.util.Log
@@ -18,30 +20,40 @@ import io.realm.Realm
 @SuppressLint("OverrideAbstract")
 class NotificationHelperService : NotificationListenerService() {
 
+    private val TAG = this::class.java.simpleName
+
     override fun onListenerConnected() {
         super.onListenerConnected()
 
-        Log.d("service :::: ", "connected!")
+        Log.d(TAG, "    ## service connected!")
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         super.onNotificationPosted(sbn)
 
         val bundle = sbn.notification.extras
-        Log.d("bundle :::: ", bundle.toString())
+        Log.d(TAG, "    ## bundle : $bundle")
+        bundle.keySet().forEach {
+            Log.d(TAG, "    ## keySet : $it / ${bundle.get(it)}")
+        }
 
         val title = bundle.getString(Notification.EXTRA_TITLE) ?: return
         val content = bundle.getString(Notification.EXTRA_TEXT)
-        val bitmap = bundle.get(Notification.EXTRA_LARGE_ICON_BIG) as Bitmap?
+        val largeIconBig = bundle.get(Notification.EXTRA_LARGE_ICON_BIG) as Bitmap?
+        val largeIcon = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M)
+            Utils.getBitmap(this, bundle.get(Notification.EXTRA_LARGE_ICON) as Icon?)
+        else null
+
         var bitmap2: Bitmap? = null
 
         sbn.notification.extras.getBundle("android.wearable.EXTENSIONS")?.let {
             for (key in it.keySet()) {
-                it.get(key)?.let { obj ->
-//                    Log.d("key :::: ", key)
-//                    Log.d("obj :::: ", obj.toString())
-                    if (key.toString() == "background") {
-                        bitmap2 = obj as Bitmap
+                it.get(key)?.let { value ->
+                    when (key) {
+                        "background" -> {
+                            bitmap2 = value as Bitmap
+                        }
+                        else -> {}
                     }
                 }
             }
@@ -55,7 +67,7 @@ class NotificationHelperService : NotificationListenerService() {
                 this.pKey = System.currentTimeMillis()
                 this.title = title
                 this.content = content ?: ""
-                this.img = Utils.getByteArray(bitmap)
+                this.img = Utils.getByteArray(largeIcon ?: largeIconBig)
                 this.img2 = Utils.getByteArray(bitmap2)
             }
         }
@@ -81,7 +93,7 @@ class NotificationHelperService : NotificationListenerService() {
                         img = data.content.img
                         img2 = data.content.img2
                     })
-                    Log.d("write :::: ", "notification, content")
+                    Log.d(TAG, "    ## write : notification, content")
                 }
             } else {
                 // Write ContentRO
@@ -93,7 +105,7 @@ class NotificationHelperService : NotificationListenerService() {
                     img = data.content.img
                     img2 = data.content.img2
                 })
-                Log.d("write :::: ", "content")
+                Log.d(TAG, "    ## write : content")
             }
 
             val intent = Intent(ACTION_NOTIFICATION)
