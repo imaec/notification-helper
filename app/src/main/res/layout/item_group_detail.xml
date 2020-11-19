@@ -6,11 +6,7 @@
 
         <variable
             name="item"
-            type="com.imaec.notificationhelper.model.ContentRO" />
-
-        <variable
-            name="packageName"
-            type="String" />
+            type="com.imaec.notificationhelper.model.GroupDetailData" />
 
         <variable
             name="sdf"
@@ -37,7 +33,7 @@
             android:background="@drawable/bg_icon"
             android:padding="8dp"
             app:image="@{item.img}"
-            app:packageName="@{packageName}"
+            app:packageName="@{item.packageName}"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
@@ -55,21 +51,12 @@
                 android:id="@+id/text_item_group_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="@{item.title}"
+                android:singleLine="true"
+                android:ellipsize="middle"
+                android:text="@{item.groupName + ` (` + item.size + `)`}"
                 android:textColor="@android:color/white"
                 android:textSize="16sp"
                 android:textStyle="bold" />
-
-            <ImageView
-                android:id="@+id/image_item_content"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="4dp"
-                android:scaleType="fitStart"
-                app:image="@{item.img2}"
-                app:isVisible="@{item.img2 != null}"/>
 
             <TextView
                 android:id="@+id/text_item_content"
@@ -87,7 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text='@{sdf.format(item.pKey)}'
+                android:text='@{sdf.format(item.time)}'
                 android:textColor="@android:color/white"
                 android:textSize="12sp" />
         </LinearLayout>

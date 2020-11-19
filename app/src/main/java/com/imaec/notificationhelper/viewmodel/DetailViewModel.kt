@@ -1,5 +1,8 @@
 package com.imaec.notificationhelper.viewmodel
 
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.imaec.notificationhelper.base.BaseViewModel
@@ -29,6 +32,17 @@ class DetailViewModel(
         _listContent.value?.let {
             if (it.size == 0) {
                 _listContent.value = repository.getContents(packageName) as ArrayList<Any>
+
+                val a = repository.getContents(packageName) as ArrayList<ContentRO>
+                val group2 = a.groupBy { content ->
+                    content.title
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    group2.forEach { s, list ->
+                        Log.d(TAG, "    ## key : $s")
+                        Log.d(TAG, "    ## list : $list")
+                    }
+                }
             }
         }
     }

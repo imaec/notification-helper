@@ -1,6 +1,7 @@
 package com.imaec.notificationhelper.ui.view.fragment
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -12,6 +13,7 @@ import com.imaec.notificationhelper.databinding.FragmentNotificationBinding
 import com.imaec.notificationhelper.model.NotificationRO
 import com.imaec.notificationhelper.repository.NotificationRepository
 import com.imaec.notificationhelper.ui.view.activity.DetailActivity
+import com.imaec.notificationhelper.ui.view.activity.GroupDetailActivity
 import com.imaec.notificationhelper.viewmodel.NotificationViewModel
 
 class NotificationFragment : BaseFragment<FragmentNotificationBinding>(R.layout.fragment_notification) {
@@ -44,7 +46,11 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(R.layout.
             getNotifications()
             addOnClickListener { item ->
                 if (item is NotificationRO) {
-                    startActivity(Intent(context, DetailActivity::class.java).apply {
+                    startActivity(Intent(context, if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        GroupDetailActivity::class.java
+                    } else {
+                        DetailActivity::class.java
+                    }).apply {
                         putExtra("packageName", item.packageName)
                     })
                 }
