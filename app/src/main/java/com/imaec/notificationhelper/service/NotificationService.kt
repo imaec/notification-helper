@@ -5,16 +5,15 @@ import android.app.Notification
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.Icon
-import android.os.Parcelable
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.util.Log
 import com.imaec.notificationhelper.ACTION_NOTIFICATION
-import com.imaec.notificationhelper.utils.Utils
 import com.imaec.notificationhelper.model.ContentData
 import com.imaec.notificationhelper.model.ContentRO
 import com.imaec.notificationhelper.model.NotificationData
 import com.imaec.notificationhelper.model.NotificationRO
+import com.imaec.notificationhelper.utils.Utils
 import io.realm.Realm
 
 @SuppressLint("OverrideAbstract")
@@ -67,7 +66,7 @@ class NotificationHelperService : NotificationListenerService() {
                 this.pKey = System.currentTimeMillis()
                 this.title = title
                 this.content = content ?: ""
-                this.img = Utils.getByteArray(largeIcon ?: largeIconBig)
+                this.img = Utils.getByteArray(largeIconBig ?: largeIcon)
                 this.img2 = Utils.getByteArray(bitmap2)
             }
         }

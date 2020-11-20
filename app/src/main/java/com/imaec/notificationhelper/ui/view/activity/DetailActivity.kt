@@ -49,16 +49,15 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
                     hideProgress()
                 }
 
-                override fun onAdFailedToLoad(p0: Int) {
+                override fun onAdFailedToLoad(p0: LoadAdError?) {
                     Log.d(TAG, "    ## error : $p0")
                     hideProgress()
                     super.onAdFailedToLoad(p0)
                 }
 
-                override fun onAdFailedToLoad(p0: LoadAdError?) {
-                    Log.d(TAG, "    ## error : $p0")
-                    hideProgress()
-                    super.onAdFailedToLoad(p0)
+                override fun onAdClosed() {
+                    super.onAdClosed()
+                    detailViewModel.getData(intent.getStringExtra("packageName")!!, intent.getStringExtra("title"))
                 }
             }
         }
@@ -102,15 +101,15 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
 
         showProgress()
         showAd()
-        detailViewModel.getData(intent.getStringExtra("packageName")!!, intent.getStringExtra("title"))
     }
 
     private fun showAd() {
         Random().let {
-            val ran = it.nextInt(9) + 1
+            val ran = it.nextInt(4) + 1
             if (i == ran) {
                 interstitialAd.loadAd(AdRequest.Builder().build())
             } else {
+                detailViewModel.getData(intent.getStringExtra("packageName")!!, intent.getStringExtra("title"))
                 hideProgress()
             }
         }

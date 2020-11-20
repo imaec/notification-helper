@@ -1,5 +1,6 @@
 package com.imaec.notificationhelper.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.imaec.notificationhelper.base.BaseViewModel
@@ -28,6 +29,7 @@ class DetailViewModel(
 
     fun getData(packageName: String, title: String? = null) {
         this.packageName = packageName
+        (adapter as DetailAdapter).setPackageName(packageName)
         _listContent.value?.let {
             if (it.size == 0) {
                 _listContent.value = repository.getContents(packageName, title) as ArrayList<ContentRO>

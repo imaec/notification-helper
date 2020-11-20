@@ -2,6 +2,7 @@ package com.imaec.notificationhelper.ui.view.fragment
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -15,6 +16,7 @@ import com.imaec.notificationhelper.base.BaseFragment
 import com.imaec.notificationhelper.databinding.FragmentSearchBinding
 import com.imaec.notificationhelper.repository.NotificationRepository
 import com.imaec.notificationhelper.ui.view.activity.DetailActivity
+import com.imaec.notificationhelper.ui.view.activity.GroupDetailActivity
 import com.imaec.notificationhelper.ui.view.activity.ImageActivity
 import com.imaec.notificationhelper.utils.KeyboardUtil
 import com.imaec.notificationhelper.viewmodel.SearchViewModel
@@ -35,7 +37,11 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
     private fun init() {
         searchViewModel = getViewModel {
             SearchViewModel(NotificationRepository(context!!), {
-                startActivity(Intent(context, DetailActivity::class.java).apply {
+                startActivity(Intent(context, if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    GroupDetailActivity::class.java
+                } else {
+                    DetailActivity::class.java
+                }).apply {
                     putExtra("packageName", it.packageName)
                 })
             }, { item, isImage ->
