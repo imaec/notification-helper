@@ -67,7 +67,7 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
 
     private fun init() {
         detailViewModel = getViewModel {
-            DetailViewModel(NotificationRepository(this), intent.getStringExtra("packageName")!!) { item, isImage ->
+            DetailViewModel(NotificationRepository(this)) { item, isImage ->
                 if (isImage) {
                     startActivity(Intent(this, ImageActivity::class.java).apply {
                         putExtra("img", item.img2)
@@ -102,7 +102,7 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
 
         showProgress()
         showAd()
-        detailViewModel.getData()
+        detailViewModel.getData(intent.getStringExtra("packageName")!!, intent.getStringExtra("title"))
     }
 
     private fun showAd() {

@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:text='@{item.appName + " (" + size + ")"}'
-            android:textColor="@android:color/white"
+            android:textColor="@color/white"
             android:textSize="18sp"
             app:layout_constraintLeft_toRightOf="@id/image_item_icon"
             app:layout_constraintTop_toTopOf="parent"

@@ -44,6 +44,7 @@ class DetailAdapter(
             binding.apply {
                 this.item = item
                 this.packageName = this@DetailAdapter.packageName
+                this.sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 
                 imageItemContent.setOnClickListener {
                     onClickContent(item, true)

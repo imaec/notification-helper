@@ -20,9 +20,7 @@ import com.imaec.notificationhelper.model.ContentRO
 import com.imaec.notificationhelper.model.GroupDetailData
 import java.text.SimpleDateFormat
 
-class GroupDetailAdapter(
-    //private val onClickContent: (ContentRO, Boolean) -> Unit
-) : BaseAdapter() {
+class GroupDetailAdapter : BaseAdapter() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         binding = ItemGroupDetailBinding.inflate(LayoutInflater.from(parent.context))
@@ -43,15 +41,12 @@ class GroupDetailAdapter(
         fun onBind(item: GroupDetailData) {
             binding.apply {
                 this.item = item
-
-//                imageItemContent.setOnClickListener {
-//                    onClickContent(item, true)
-//                }
+                this.sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
             }
 
-//            itemView.setOnClickListener {
-//                onClickContent(item, false)
-//            }
+            itemView.setOnClickListener {
+                onClick(item)
+            }
         }
     }
 }

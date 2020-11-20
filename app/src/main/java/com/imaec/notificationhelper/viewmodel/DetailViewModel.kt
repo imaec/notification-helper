@@ -1,8 +1,5 @@
 package com.imaec.notificationhelper.viewmodel
 
-import android.os.Build
-import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.imaec.notificationhelper.base.BaseViewModel
@@ -13,9 +10,10 @@ import com.imaec.notificationhelper.ui.adapter.DetailAdapter
 @Suppress("UNCHECKED_CAST")
 class DetailViewModel(
     private val repository: NotificationRepository,
-    private val packageName: String,
     private val onClickContent: (ContentRO, Boolean) -> Unit
 ) : BaseViewModel() {
+
+    private var packageName = ""
 
     init {
         adapter = DetailAdapter { item, isImage ->
@@ -25,24 +23,14 @@ class DetailViewModel(
         }
     }
 
-    private val _listContent = MutableLiveData<ArrayList<Any>>(ArrayList())
-    val listContent: LiveData<ArrayList<Any>> get() = _listContent
+    private val _listContent = MutableLiveData<ArrayList<ContentRO>>(ArrayList())
+    val listContent: LiveData<ArrayList<ContentRO>> get() = _listContent
 
-    fun getData() {
+    fun getData(packageName: String, title: String? = null) {
+        this.packageName = packageName
         _listContent.value?.let {
             if (it.size == 0) {
-                _listContent.value = repository.getContents(packageName) as ArrayList<Any>
-
-                val a = repository.getContents(packageName) as ArrayList<ContentRO>
-                val group2 = a.groupBy { content ->
-                    content.title
-                }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    group2.forEach { s, list ->
-                        Log.d(TAG, "    ## key : $s")
-                        Log.d(TAG, "    ## list : $list")
-                    }
-                }
+                _listContent.value = repository.getContents(packageName, title) as ArrayList<ContentRO>
             }
         }
     }

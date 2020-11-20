@@ -14,6 +14,8 @@ class NotificationRepository(
     private val context: Context
 ) {
 
+    private val TAG = this::class.java.simpleName
+
     private val realm by lazy { Realm.getDefaultInstance() }
 
     fun getNotifications(): List<NotificationRO> {
@@ -33,15 +35,23 @@ class NotificationRepository(
         return listTemp
     }
 
-    fun getContents(packageName: String): List<ContentRO> {
+    fun getContents(packageName: String, title: String? = null): List<ContentRO> {
         val listItem = ArrayList<ContentRO>()
         val realmResult = realm.where(NotificationRO::class.java)
             .equalTo("packageName", packageName)
             .findFirst()
         realmResult?.let {
-            listItem.addAll(it.contents)
+            if (title == null) {
+                listItem.addAll(it.contents)
+            } else {
+                it.contents.filter { content ->
+                    content.title == title
+                }.forEach { filteringContent ->
+                    listItem.add(filteringContent)
+                }
+            }
         }
-        return listItem.reversed()
+        return if (listItem.size == 1) listItem else listItem.reversed()
     }
 
     fun search(method: String, keyword: String): List<Any> {

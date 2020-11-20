@@ -1,5 +1,6 @@
 package com.imaec.notificationhelper.ui.view.activity
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
@@ -9,8 +10,8 @@ import com.imaec.notificationhelper.Extensions.getViewModel
 import com.imaec.notificationhelper.R
 import com.imaec.notificationhelper.base.BaseActivity
 import com.imaec.notificationhelper.databinding.ActivityGroupDetailBinding
+import com.imaec.notificationhelper.model.GroupDetailData
 import com.imaec.notificationhelper.repository.NotificationRepository
-import com.imaec.notificationhelper.viewmodel.DetailViewModel
 import com.imaec.notificationhelper.viewmodel.GroupDetailViewModel
 
 @RequiresApi(Build.VERSION_CODES.N)
@@ -26,7 +27,7 @@ class GroupDetailActivity : BaseActivity<ActivityGroupDetailBinding>(R.layout.ac
 
     private fun init() {
         groupViewModel = getViewModel {
-            GroupDetailViewModel(NotificationRepository(this), intent.getStringExtra("packageName")!!)
+            GroupDetailViewModel(NotificationRepository(this))
         }
 
         binding.apply {
@@ -35,6 +36,16 @@ class GroupDetailActivity : BaseActivity<ActivityGroupDetailBinding>(R.layout.ac
             recyclerGroup.addItemDecoration(DividerItemDecoration(this@GroupDetailActivity, RecyclerView.VERTICAL))
         }
 
-        groupViewModel.getData()
+        groupViewModel.apply {
+            getData(intent.getStringExtra("packageName")!!)
+            addOnClickListener { item ->
+                if (item is GroupDetailData) {
+                    startActivity(Intent(this@GroupDetailActivity, DetailActivity::class.java).apply {
+                        putExtra("packageName", item.packageName)
+                        putExtra("title", item.groupName)
+                    })
+                }
+            }
+        }
     }
 }

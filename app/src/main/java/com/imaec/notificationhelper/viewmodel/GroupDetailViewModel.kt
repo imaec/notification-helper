@@ -12,8 +12,7 @@ import com.imaec.notificationhelper.ui.adapter.GroupDetailAdapter
 
 @Suppress("UNCHECKED_CAST")
 class GroupDetailViewModel(
-    private val repository: NotificationRepository,
-    private val packageName: String
+    private val repository: NotificationRepository
 ) : BaseViewModel() {
 
     init {
@@ -24,11 +23,11 @@ class GroupDetailViewModel(
     val listGroup: LiveData<ArrayList<GroupDetailData>> get() = _listGroup
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun getData() {
+    fun getData(packageName: String) {
         val listTemp = ArrayList<GroupDetailData>()
         (repository.getContents(packageName) as ArrayList<ContentRO>).groupBy { content ->
             content.title
-        }.forEach { key, list ->
+        }.forEach { (_, list) ->
             listTemp.add(GroupDetailData(
                 list[0].pKey,
                 list[0].title,

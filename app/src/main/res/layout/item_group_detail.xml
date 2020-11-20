@@ -54,7 +54,7 @@
                 android:singleLine="true"
                 android:ellipsize="middle"
                 android:text="@{item.groupName + ` (` + item.size + `)`}"
-                android:textColor="@android:color/white"
+                android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -66,7 +66,7 @@
                 android:ellipsize="end"
                 android:maxLines="4"
                 android:text="@{item.content}"
-                android:textColor="@android:color/white"
+                android:textColor="@color/white"
                 android:textSize="14sp" />
 
             <TextView
@@ -75,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text='@{sdf.format(item.time)}'
-                android:textColor="@android:color/white"
+                android:textColor="@color/grayC3"
                 android:textSize="12sp" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
