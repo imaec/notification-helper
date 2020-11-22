@@ -9,7 +9,6 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.imaec.notificationhelper.Extensions.getViewModel
 import com.imaec.notificationhelper.R
 import com.imaec.notificationhelper.base.BaseFragment
@@ -20,7 +19,6 @@ import com.imaec.notificationhelper.ui.view.activity.GroupDetailActivity
 import com.imaec.notificationhelper.ui.view.activity.ImageActivity
 import com.imaec.notificationhelper.utils.KeyboardUtil
 import com.imaec.notificationhelper.viewmodel.SearchViewModel
-import kotlinx.android.synthetic.main.fragment_search.*
 
 class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_search) {
 

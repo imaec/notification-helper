@@ -11,6 +11,7 @@ import com.imaec.notificationhelper.databinding.ItemDetailBinding
 import com.imaec.notificationhelper.databinding.ItemNotificationBinding
 import com.imaec.notificationhelper.model.ContentRO
 import com.imaec.notificationhelper.model.NotificationRO
+import java.text.SimpleDateFormat
 
 class SearchAdapter(
     private val onClickNotification: (NotificationRO) -> Unit,
@@ -75,6 +76,7 @@ class SearchAdapter(
         fun onBind(item: ContentRO) {
             binding.apply {
                 this.item = item
+                this.sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 
                 imageItemContent.setOnClickListener {
                     onClickContent(item, true)
