@@ -3,6 +3,7 @@ package com.imaec.notificationhelper.ui.view.activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +19,7 @@ import com.imaec.notificationhelper.databinding.ActivityDetailBinding
 import com.imaec.notificationhelper.model.ContentRO
 import com.imaec.notificationhelper.model.NotificationRO
 import com.imaec.notificationhelper.repository.NotificationRepository
+import com.imaec.notificationhelper.utils.Utils
 import com.imaec.notificationhelper.viewmodel.DetailViewModel
 import io.realm.Realm
 import java.util.*
@@ -40,6 +42,14 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
         init()
     }
 
+    fun onClick(view: View) {
+        when (view.id) {
+            R.id.image_back -> {
+                onBackPressed()
+            }
+        }
+    }
+
     private fun adInit() {
         interstitialAd = InterstitialAd(this).apply {
             adUnitId = getString(R.string.ad_id_detail_front)
@@ -57,7 +67,7 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
 
                 override fun onAdClosed() {
                     super.onAdClosed()
-                    detailViewModel.getData(intent.getStringExtra("packageName")!!, intent.getStringExtra("title"))
+                    getData()
                 }
             }
         }
@@ -109,9 +119,20 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
             if (i == ran) {
                 interstitialAd.loadAd(AdRequest.Builder().build())
             } else {
-                detailViewModel.getData(intent.getStringExtra("packageName")!!, intent.getStringExtra("title"))
+                getData()
                 hideProgress()
             }
         }
+    }
+
+    private fun getData() {
+        detailViewModel.getData(
+            intent.getStringExtra("packageName")!!,
+            Utils.getAppName(
+                this,
+                intent.getStringExtra("packageName")!!
+            ),
+            intent.getStringExtra("title")
+        )
     }
 }
