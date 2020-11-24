@@ -8,6 +8,8 @@
     <string name="info">안내</string>
     <string name="ok">확인</string>
     <string name="cancel">취소</string>
+    <string name="app_open">앱 열기</string>
+    <string name="ignore">알림 표시하지 않기</string>
     <string name="test">${info} asdf</string>
 
     <string name="msg_access_notification">알림리스트를 사용하시려면\n\'알림 접근 권한\'을 \'허용\'하셔야 합니다.\n\'%1$s\'의 알림 접근을 허용해주세요.</string>

@@ -33,6 +33,10 @@ class NotificationAdapter : BaseAdapter() {
             itemView.setOnClickListener {
                 onClick(item)
             }
+            itemView.setOnLongClickListener {
+                onLongClick(item)
+                true
+            }
         }
     }
 }

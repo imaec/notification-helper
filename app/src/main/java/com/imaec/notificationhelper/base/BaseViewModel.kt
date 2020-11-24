@@ -18,4 +18,8 @@ abstract class BaseViewModel : ViewModel() {
     open fun addOnClickListener(onClick: (Any) -> Unit) {
         adapter.addOnClickListener(onClick)
     }
+
+    open fun addOnLongClickListener(onLongClick: (Any) -> Unit) {
+        adapter.addOnLongClickListener(onLongClick)
+    }
 }

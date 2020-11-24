@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.imaec.notificationhelper.Extensions.getViewModel
@@ -14,6 +15,7 @@ import com.imaec.notificationhelper.model.NotificationRO
 import com.imaec.notificationhelper.repository.NotificationRepository
 import com.imaec.notificationhelper.ui.view.activity.DetailActivity
 import com.imaec.notificationhelper.ui.view.activity.GroupDetailActivity
+import com.imaec.notificationhelper.ui.view.dialog.NotificationDialog
 import com.imaec.notificationhelper.viewmodel.NotificationViewModel
 
 class NotificationFragment : BaseFragment<FragmentNotificationBinding>(R.layout.fragment_notification) {
@@ -53,6 +55,21 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(R.layout.
                     }).apply {
                         putExtra("packageName", item.packageName)
                     })
+                }
+            }
+            addOnLongClickListener { item ->
+                if (item is NotificationRO) {
+                    NotificationDialog(context!!)
+                        .setTitle(item.appName)
+                        .setOnClickOpen {
+                            Toast.makeText(context, "open", Toast.LENGTH_SHORT).show()
+                            it.dismiss()
+                        }
+                        .setOnClickIgnore {
+                            Toast.makeText(context, "ignore", Toast.LENGTH_SHORT).show()
+                            it.dismiss()
+                        }
+                        .show()
                 }
             }
         }
