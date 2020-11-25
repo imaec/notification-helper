@@ -17,8 +17,8 @@ class SettingViewModel(
 ) : BaseViewModel() {
 
     init {
-        adapter = AppAdapter { position, isSelected ->
-            repository.setIgnore(_listApp.value as List<AppData>, position, isSelected)
+        adapter = AppAdapter { item, isSelected ->
+            repository.setIgnore(item.packageName, isSelected)
         }
     }
 
@@ -30,7 +30,11 @@ class SettingViewModel(
     }
 
     fun getIgnore() {
-        (adapter as AppAdapter).setSelectedItems(repository.getIgnore())
-        adapter.notifyDataSetChanged()
+        listApp.value?.let {
+            if (it.size > 0) {
+                (adapter as AppAdapter).setSelectedItems(repository.getIgnore())
+                adapter.notifyDataSetChanged()
+            }
+        }
     }
 }

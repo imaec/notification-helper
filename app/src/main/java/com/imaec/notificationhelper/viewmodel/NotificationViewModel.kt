@@ -21,4 +21,8 @@ class NotificationViewModel(
     fun getNotifications() {
         _listNotification.value = repository.getNotifications() as ArrayList<Any>
     }
+
+    fun setIgnore(packageName: String) {
+        repository.setIgnore(packageName)
+    }
 }

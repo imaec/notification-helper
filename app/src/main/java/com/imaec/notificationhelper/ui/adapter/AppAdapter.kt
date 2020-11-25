@@ -16,7 +16,7 @@ import com.imaec.notificationhelper.model.IgnoreRO
 import io.realm.RealmResults
 
 class AppAdapter(
-    val callback: (position: Int, isSelected: Boolean) -> Unit
+    val callback: (item: AppData, isSelected: Boolean) -> Unit
 ) : BaseAdapter() {
 
     private val selectedItems = SparseBooleanArray()
@@ -50,7 +50,7 @@ class AppAdapter(
 
                 notifyItemChanged(position)
 
-                callback(position, selectedItems.get(position))
+                callback(item, selectedItems.get(position))
             }
         }
     }

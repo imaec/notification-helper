@@ -23,6 +23,13 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
         init()
     }
 
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (hidden) return
+
+        settingViewModel.getIgnore()
+    }
+
     private fun init() {
         settingViewModel = getViewModel { SettingViewModel(NotificationRepository(context!!)) }
 
@@ -30,12 +37,6 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
             lifecycleOwner = this@SettingFragment
             settingViewModel = this@SettingFragment.settingViewModel
             recyclerSetting.addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
-        }
-
-        settingViewModel.apply {
-            listApp.observe(activity!!) {
-                getIgnore()
-            }
         }
 
         getAppList()
@@ -55,6 +56,9 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
             ))
         }
         listApp.sortBy { it.name }
-        settingViewModel.setListApp(listApp)
+        settingViewModel.apply {
+            setListApp(listApp)
+            getIgnore()
+        }
     }
 }

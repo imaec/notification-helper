@@ -62,11 +62,16 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(R.layout.
                     NotificationDialog(context!!)
                         .setTitle(item.appName)
                         .setOnClickOpen {
-                            Toast.makeText(context, "open", Toast.LENGTH_SHORT).show()
+                            activity?.packageManager?.getLaunchIntentForPackage(item.packageName)?.let { launchIntent ->
+                                startActivity(launchIntent)
+                            }
                             it.dismiss()
                         }
                         .setOnClickIgnore {
-                            Toast.makeText(context, "ignore", Toast.LENGTH_SHORT).show()
+                            notificationViewModel.apply {
+                                setIgnore(item.packageName)
+                                getNotifications()
+                            }
                             it.dismiss()
                         }
                         .show()

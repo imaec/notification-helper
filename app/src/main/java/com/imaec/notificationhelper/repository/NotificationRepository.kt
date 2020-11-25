@@ -82,15 +82,19 @@ class NotificationRepository(
         return realm.where(IgnoreRO::class.java).findAll()
     }
 
-    fun setIgnore(listItem: List<AppData>, position: Int, isSelected: Boolean) {
+    fun setIgnore(item: AppData, isSelected: Boolean) {
+        setIgnore(item.packageName, isSelected)
+    }
+
+    fun setIgnore(packageName: String, isSelected: Boolean = true) {
         realm.executeTransaction {
             val realmResult = realm.where(IgnoreRO::class.java)
-                .equalTo("packageName", listItem[position].packageName)
+                .equalTo("packageName", packageName)
                 .findFirst()
             if (isSelected) {
                 // 저장
                 it.createObject(IgnoreRO::class.java).apply {
-                    packageName = listItem[position].packageName
+                    this.packageName = packageName
                 }
             } else {
                 // 삭제
