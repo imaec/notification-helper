@@ -15,6 +15,7 @@ import com.imaec.notificationhelper.model.NotificationRO
 import com.imaec.notificationhelper.repository.NotificationRepository
 import com.imaec.notificationhelper.ui.view.activity.DetailActivity
 import com.imaec.notificationhelper.ui.view.activity.GroupDetailActivity
+import com.imaec.notificationhelper.ui.view.dialog.IgnoreInfoDialog
 import com.imaec.notificationhelper.ui.view.dialog.NotificationDialog
 import com.imaec.notificationhelper.viewmodel.NotificationViewModel
 
@@ -71,6 +72,8 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(R.layout.
                             notificationViewModel.apply {
                                 setIgnore(item.packageName)
                                 getNotifications()
+
+                                showIgnoreInfo(item.appName)
                             }
                             it.dismiss()
                         }
@@ -78,5 +81,17 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(R.layout.
                 }
             }
         }
+    }
+
+    private fun showIgnoreInfo(appName: String) {
+        IgnoreInfoDialog(context!!)
+            .setContent(String.format(context!!.getString(R.string.msg_ignore_info, appName)))
+            .setPositive(context!!.getString(R.string.ok)) {
+                it.dismiss()
+            }
+            .setNegative(context!!.getString(R.string.not_show_again)) {
+                it.dismiss()
+            }
+            .show()
     }
 }
