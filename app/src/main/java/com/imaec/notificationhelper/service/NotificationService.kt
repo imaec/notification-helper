@@ -7,6 +7,7 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Icon
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
+import android.text.SpannableString
 import android.util.Log
 import com.imaec.notificationhelper.ACTION_NOTIFICATION
 import com.imaec.notificationhelper.model.ContentData
@@ -36,7 +37,7 @@ class NotificationHelperService : NotificationListenerService() {
             Log.d(TAG, "    ## keySet : $it / ${bundle.get(it)}")
         }
 
-        val title = bundle.getString(Notification.EXTRA_TITLE) ?: return
+        val title = bundle.getCharSequence(Notification.EXTRA_TITLE)?.toString() ?: return
         val content = bundle.getString(Notification.EXTRA_TEXT)
         val largeIconBig = bundle.get(Notification.EXTRA_LARGE_ICON_BIG) as Bitmap?
         val largeIcon = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M)

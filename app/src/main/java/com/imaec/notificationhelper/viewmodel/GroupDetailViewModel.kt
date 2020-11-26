@@ -9,6 +9,7 @@ import com.imaec.notificationhelper.model.ContentRO
 import com.imaec.notificationhelper.model.GroupDetailData
 import com.imaec.notificationhelper.repository.NotificationRepository
 import com.imaec.notificationhelper.ui.adapter.GroupDetailAdapter
+import java.text.DecimalFormat
 
 @Suppress("UNCHECKED_CAST")
 class GroupDetailViewModel(
@@ -33,7 +34,7 @@ class GroupDetailViewModel(
                 list[0].title,
                 list[0].img,
                 list[0].content,
-                list.size,
+                DecimalFormat("###,###").format(list.size),
                 packageName
             ))
         }

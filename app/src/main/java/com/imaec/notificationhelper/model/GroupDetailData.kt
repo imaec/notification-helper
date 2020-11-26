@@ -5,7 +5,7 @@ data class GroupDetailData(
     val groupName: String = "",
     val img: ByteArray? = null,
     val content: String = "",
-    val size: Int = 0,
+    val size: String = "0",
     val packageName: String = ""
 ) {
 

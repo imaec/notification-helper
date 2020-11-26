@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.imaec.notificationhelper.Extensions.getViewModel
+import com.imaec.notificationhelper.PrefKey
 import com.imaec.notificationhelper.R
 import com.imaec.notificationhelper.base.BaseFragment
 import com.imaec.notificationhelper.databinding.FragmentNotificationBinding
@@ -17,6 +18,7 @@ import com.imaec.notificationhelper.ui.view.activity.DetailActivity
 import com.imaec.notificationhelper.ui.view.activity.GroupDetailActivity
 import com.imaec.notificationhelper.ui.view.dialog.IgnoreInfoDialog
 import com.imaec.notificationhelper.ui.view.dialog.NotificationDialog
+import com.imaec.notificationhelper.utils.PreferencesUtil
 import com.imaec.notificationhelper.viewmodel.NotificationViewModel
 
 class NotificationFragment : BaseFragment<FragmentNotificationBinding>(R.layout.fragment_notification) {
@@ -84,12 +86,15 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(R.layout.
     }
 
     private fun showIgnoreInfo(appName: String) {
+        if (PreferencesUtil.getBool(context!!, PrefKey.PREF_NOT_SHOW_AGAIN)) return
+
         IgnoreInfoDialog(context!!)
             .setContent(String.format(context!!.getString(R.string.msg_ignore_info, appName)))
             .setPositive(context!!.getString(R.string.ok)) {
                 it.dismiss()
             }
             .setNegative(context!!.getString(R.string.not_show_again)) {
+                PreferencesUtil.put(context!!, PrefKey.PREF_NOT_SHOW_AGAIN, true)
                 it.dismiss()
             }
             .show()

@@ -10,7 +10,7 @@
 
         <variable
             name="size"
-            type="Integer" />
+            type="String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

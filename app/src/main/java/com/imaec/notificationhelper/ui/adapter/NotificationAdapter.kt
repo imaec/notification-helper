@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.imaec.notificationhelper.base.BaseAdapter
 import com.imaec.notificationhelper.databinding.ItemNotificationBinding
 import com.imaec.notificationhelper.model.NotificationRO
+import java.text.DecimalFormat
 
 class NotificationAdapter : BaseAdapter() {
 
@@ -27,7 +28,7 @@ class NotificationAdapter : BaseAdapter() {
         fun onBind(item: NotificationRO) {
             binding.apply {
                 this.item = item
-                this.size = item.contents.size
+                this.size = DecimalFormat("###,###").format(item.contents.size)
             }
 
             itemView.setOnClickListener {
