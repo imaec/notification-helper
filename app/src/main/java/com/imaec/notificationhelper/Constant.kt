@@ -12,6 +12,11 @@ object ItemType {
     const val TYPE_CONTENT = 2
 }
 
+object ExtraKey {
+    const val EXTRA_TITLE = "extra_title"
+    const val EXTRA_PACKAGE_NAME = "extra_package_name"
+}
+
 enum class PrefKey {
     PREF_NOT_SHOW_AGAIN
 }

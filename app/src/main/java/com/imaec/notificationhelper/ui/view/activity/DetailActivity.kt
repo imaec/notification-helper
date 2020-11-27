@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.gms.ads.*
 import com.imaec.notificationhelper.Extensions.getViewModel
+import com.imaec.notificationhelper.ExtraKey
 import com.imaec.notificationhelper.ui.callback.EndlessRecyclerOnScrollListener
 import com.imaec.notificationhelper.R
 import com.imaec.notificationhelper.ui.adapter.DetailAdapter
@@ -127,12 +128,12 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
 
     private fun getData() {
         detailViewModel.getData(
-            intent.getStringExtra("packageName")!!,
+            intent.getStringExtra(ExtraKey.EXTRA_PACKAGE_NAME)!!,
             Utils.getAppName(
                 this,
-                intent.getStringExtra("packageName")!!
+                intent.getStringExtra(ExtraKey.EXTRA_PACKAGE_NAME)!!
             ),
-            intent.getStringExtra("title")
+            intent.getStringExtra(ExtraKey.EXTRA_TITLE)
         )
     }
 }

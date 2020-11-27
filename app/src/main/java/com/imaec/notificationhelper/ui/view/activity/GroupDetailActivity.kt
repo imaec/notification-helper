@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.imaec.notificationhelper.Extensions.getViewModel
+import com.imaec.notificationhelper.ExtraKey
 import com.imaec.notificationhelper.R
 import com.imaec.notificationhelper.base.BaseActivity
 import com.imaec.notificationhelper.databinding.ActivityGroupDetailBinding
@@ -37,12 +38,12 @@ class GroupDetailActivity : BaseActivity<ActivityGroupDetailBinding>(R.layout.ac
         }
 
         groupViewModel.apply {
-            getData(intent.getStringExtra("packageName")!!)
+            getData(intent.getStringExtra(ExtraKey.EXTRA_PACKAGE_NAME)!!)
             addOnClickListener { item ->
                 if (item is GroupDetailData) {
                     startActivity(Intent(this@GroupDetailActivity, DetailActivity::class.java).apply {
-                        putExtra("packageName", item.packageName)
-                        putExtra("title", item.groupName)
+                        putExtra(ExtraKey.EXTRA_PACKAGE_NAME, item.packageName)
+                        putExtra(ExtraKey.EXTRA_TITLE, item.groupName)
                     })
                 }
             }

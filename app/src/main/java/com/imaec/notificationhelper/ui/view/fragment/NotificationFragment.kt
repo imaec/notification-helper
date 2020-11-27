@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.imaec.notificationhelper.Extensions.getViewModel
+import com.imaec.notificationhelper.ExtraKey
 import com.imaec.notificationhelper.PrefKey
 import com.imaec.notificationhelper.R
 import com.imaec.notificationhelper.base.BaseFragment
@@ -56,14 +57,14 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(R.layout.
                     } else {
                         DetailActivity::class.java
                     }).apply {
-                        putExtra("packageName", item.packageName)
+                        putExtra(ExtraKey.EXTRA_PACKAGE_NAME, item.packageName)
                     })
                 }
             }
             addOnLongClickListener { item ->
                 if (item is NotificationRO) {
                     NotificationDialog(context!!)
-                        .setTitle(item.appName)
+                        .setTitle(if (item.appName.isNotEmpty()) item.appName else getString(R.string.system))
                         .setOnClickOpen {
                             activity?.packageManager?.getLaunchIntentForPackage(item.packageName)?.let { launchIntent ->
                                 startActivity(launchIntent)
@@ -71,6 +72,11 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(R.layout.
                             it.dismiss()
                         }
                         .setOnClickIgnore {
+                            if (item.appName.isEmpty()) {
+                                Toast.makeText(context, R.string.msg_cannot_ignore_system_alert, Toast.LENGTH_SHORT).show()
+                                it.dismiss()
+                                return@setOnClickIgnore
+                            }
                             notificationViewModel.apply {
                                 setIgnore(item.packageName)
                                 getNotifications()
