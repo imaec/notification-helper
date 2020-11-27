@@ -1,5 +1,6 @@
 package com.imaec.notificationhelper.ui.view.fragment
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -7,6 +8,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
+import com.imaec.notificationhelper.ActivityRequestCode
 import com.imaec.notificationhelper.Extensions.getViewModel
 import com.imaec.notificationhelper.ExtraKey
 import com.imaec.notificationhelper.PrefKey
@@ -39,6 +41,16 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(R.layout.
         notificationViewModel.getNotifications()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == ActivityRequestCode.REQUEST_GROUP_DETAIL) {
+            if (resultCode == Activity.RESULT_OK) {
+                notificationViewModel.getNotifications()
+            }
+        }
+    }
+
     private fun init() {
         notificationViewModel = getViewModel { NotificationViewModel(NotificationRepository(context!!)) }
 
@@ -52,13 +64,13 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(R.layout.
             getNotifications()
             addOnClickListener { item ->
                 if (item is NotificationRO) {
-                    startActivity(Intent(context, if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    startActivityForResult(Intent(context, if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         GroupDetailActivity::class.java
                     } else {
                         DetailActivity::class.java
                     }).apply {
                         putExtra(ExtraKey.EXTRA_PACKAGE_NAME, item.packageName)
-                    })
+                    }, ActivityRequestCode.REQUEST_GROUP_DETAIL)
                 }
             }
             addOnLongClickListener { item ->
@@ -117,7 +129,7 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(R.layout.
                 notificationViewModel.apply {
                     delete(item.packageName) { isSuccess ->
                         if (isSuccess) {
-                            activity?.runOnUiThread { getNotifications() }
+                            getNotifications()
                         }
                     }
                 }

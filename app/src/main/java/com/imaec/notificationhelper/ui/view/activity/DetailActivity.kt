@@ -51,6 +51,10 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
         }
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+    }
+
     private fun adInit() {
         interstitialAd = InterstitialAd(this).apply {
             adUnitId = getString(R.string.ad_id_detail_front)
@@ -162,10 +166,12 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
                         item.title,
                         item.pKey
                     ) { isSuccess ->
-                        if (isSuccess)
+                        if (isSuccess) {
                             getData(true)
-                        else
+                            setResult(RESULT_OK)
+                        } else {
                             Toast.makeText(this@DetailActivity, R.string.msg_delete_fail, Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
                 it.dismiss()

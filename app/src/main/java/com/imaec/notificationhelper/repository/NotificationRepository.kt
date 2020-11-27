@@ -68,21 +68,29 @@ class NotificationRepository(
 
     // 알림 그룹 삭제
     fun delete(packageName: String, groupName: String, callback: (Boolean) -> Unit) {
-        realm.where(NotificationRO::class.java)
+        val realmList = realm.where(NotificationRO::class.java)
             .equalTo("packageName", packageName)
-            .findFirst()?.let {
-                val listTemp = RealmList<ContentRO>()
-                it.contents.groupBy { content ->
-                    content.title
-                }.filter { group ->
-                    group.key == groupName
-                }[groupName]?.forEach { content ->
-                    listTemp.add(content)
-                }
-                realm.executeTransaction {
-                    callback(listTemp.deleteAllFromRealm())
-                }
+            .findFirst()?.contents ?: return
+        realmList.addChangeListener { _, changeSet ->
+            Log.d(TAG, "    ## changeSet : ${changeSet.isCompleteResult}")
+            callback(changeSet.isCompleteResult)
+        }
+
+        val listPosition = ArrayList<Int>()
+        realmList.groupBy { content ->
+            content.title
+        }.filter { group ->
+            group.key == groupName
+        }[groupName]?.forEach { content ->
+            listPosition.add(realmList.indexOf(content))
+        }
+        realm.executeTransaction {
+            var i = 0
+            listPosition.forEach { position ->
+                realmList.deleteFromRealm(position - i)
+                i++
             }
+        }
     }
 
     // 개별 알림 삭제

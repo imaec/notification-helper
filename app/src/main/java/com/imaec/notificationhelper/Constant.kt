@@ -5,6 +5,8 @@ const val PREF_NAME = "NotificationHelper"
 
 object ActivityRequestCode {
     const val REQUEST_SPLASH_FINISH = 101
+    const val REQUEST_DETAIL = 201
+    const val REQUEST_GROUP_DETAIL = 202
 }
 
 object ItemType {

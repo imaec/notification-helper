@@ -3,9 +3,11 @@ package com.imaec.notificationhelper.ui.view.activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
+import com.imaec.notificationhelper.ActivityRequestCode
 import com.imaec.notificationhelper.Extensions.getViewModel
 import com.imaec.notificationhelper.ExtraKey
 import com.imaec.notificationhelper.R
@@ -28,6 +30,17 @@ class GroupDetailActivity : BaseActivity<ActivityGroupDetailBinding>(R.layout.ac
         init()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == ActivityRequestCode.REQUEST_DETAIL) {
+            if (resultCode == RESULT_OK) {
+                groupViewModel.getData(intent.getStringExtra(ExtraKey.EXTRA_PACKAGE_NAME)!!)
+                setResult(RESULT_OK)
+            }
+        }
+    }
+
     private fun init() {
         groupViewModel = getViewModel {
             GroupDetailViewModel(NotificationRepository(this))
@@ -43,10 +56,10 @@ class GroupDetailActivity : BaseActivity<ActivityGroupDetailBinding>(R.layout.ac
             getData(intent.getStringExtra(ExtraKey.EXTRA_PACKAGE_NAME)!!)
             addOnClickListener { item ->
                 if (item is GroupDetailData) {
-                    startActivity(Intent(this@GroupDetailActivity, DetailActivity::class.java).apply {
+                    startActivityForResult(Intent(this@GroupDetailActivity, DetailActivity::class.java).apply {
                         putExtra(ExtraKey.EXTRA_PACKAGE_NAME, item.packageName)
                         putExtra(ExtraKey.EXTRA_TITLE, item.groupName)
-                    })
+                    }, ActivityRequestCode.REQUEST_DETAIL)
                 }
             }
             addOnLongClickListener { item ->
@@ -70,7 +83,10 @@ class GroupDetailActivity : BaseActivity<ActivityGroupDetailBinding>(R.layout.ac
                 groupViewModel.apply {
                     delete(item.packageName, item.groupName) { isSuccess ->
                         if (isSuccess) {
-                            runOnUiThread { getData(intent.getStringExtra(ExtraKey.EXTRA_PACKAGE_NAME)!!) }
+                            getData(intent.getStringExtra(ExtraKey.EXTRA_PACKAGE_NAME)!!)
+                            setResult(RESULT_OK)
+                        } else {
+                            Toast.makeText(this@GroupDetailActivity, R.string.msg_delete_fail, Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
