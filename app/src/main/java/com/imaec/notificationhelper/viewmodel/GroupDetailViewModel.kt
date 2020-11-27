@@ -42,7 +42,7 @@ class GroupDetailViewModel(
         _listGroup.value = listTemp
     }
 
-    fun delete(packageName: String) {
-        repository.delete(packageName)
+    fun delete(packageName: String, groupName: String, callback: (Boolean) -> Unit) {
+        repository.delete(packageName, groupName, callback)
     }
 }

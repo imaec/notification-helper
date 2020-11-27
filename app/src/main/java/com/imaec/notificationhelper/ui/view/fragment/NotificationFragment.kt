@@ -114,7 +114,13 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(R.layout.
         CommonDialog(context!!)
             .setContent(String.format(getString(R.string.msg_delete_all, item.appName)))
             .setPositive(getString(R.string.delete)) {
-                notificationViewModel.delete(item.packageName)
+                notificationViewModel.apply {
+                    delete(item.packageName) { isSuccess ->
+                        if (isSuccess) {
+                            activity?.runOnUiThread { getNotifications() }
+                        }
+                    }
+                }
                 it.dismiss()
             }
             .setNegative(getString(R.string.cancel)) {

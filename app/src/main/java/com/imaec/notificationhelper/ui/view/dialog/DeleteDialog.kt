@@ -8,13 +8,12 @@ import android.os.Bundle
 import android.view.WindowManager
 import com.imaec.notificationhelper.R
 import com.imaec.notificationhelper.base.BaseDialog
-import com.imaec.notificationhelper.databinding.DialogGroupDetailBinding
-import com.imaec.notificationhelper.databinding.DialogNotificationBinding
+import com.imaec.notificationhelper.databinding.DialogDeleteBinding
 
-class GroupDetailDialog(context: Context) : BaseDialog<DialogGroupDetailBinding>(context, R.layout.dialog_group_detail) {
+class DeleteDialog(context: Context) : BaseDialog<DialogDeleteBinding>(context, R.layout.dialog_delete) {
 
     private var title: String? = null
-    private var onClickDelete: ((GroupDetailDialog) -> Unit)? = null
+    private var onClickDelete: ((DeleteDialog) -> Unit)? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,18 +33,18 @@ class GroupDetailDialog(context: Context) : BaseDialog<DialogGroupDetailBinding>
             textTitle.text = title ?: context.getString(R.string.app_name)
             textDelete.setOnClickListener {
                 onClickDelete?.let {
-                    it(this@GroupDetailDialog)
+                    it(this@DeleteDialog)
                 } ?: dismiss()
             }
         }
     }
 
-    fun setTitle(title: String): GroupDetailDialog {
+    fun setTitle(title: String): DeleteDialog {
         this.title = title
         return this
     }
 
-    fun setOnClickDelete(onClickDelete: (GroupDetailDialog) -> Unit): GroupDetailDialog {
+    fun setOnClickDelete(onClickDelete: (DeleteDialog) -> Unit): DeleteDialog {
         this.onClickDelete = onClickDelete
         return this
     }

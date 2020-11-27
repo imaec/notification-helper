@@ -54,6 +54,11 @@ class DetailAdapter(
             itemView.setOnClickListener {
                 onClickContent(item, false)
             }
+
+            itemView.setOnLongClickListener {
+                onLongClick(item)
+                true
+            }
         }
     }
 

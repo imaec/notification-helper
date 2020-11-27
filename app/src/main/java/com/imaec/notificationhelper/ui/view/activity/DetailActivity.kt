@@ -4,27 +4,27 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.appcompat.app.AlertDialog
+import android.widget.Toast
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.google.android.gms.ads.*
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.InterstitialAd
+import com.google.android.gms.ads.LoadAdError
 import com.imaec.notificationhelper.Extensions.getViewModel
 import com.imaec.notificationhelper.ExtraKey
-import com.imaec.notificationhelper.ui.callback.EndlessRecyclerOnScrollListener
 import com.imaec.notificationhelper.R
-import com.imaec.notificationhelper.ui.adapter.DetailAdapter
 import com.imaec.notificationhelper.base.BaseActivity
 import com.imaec.notificationhelper.databinding.ActivityDetailBinding
 import com.imaec.notificationhelper.model.ContentRO
-import com.imaec.notificationhelper.model.NotificationRO
 import com.imaec.notificationhelper.repository.NotificationRepository
+import com.imaec.notificationhelper.ui.callback.EndlessRecyclerOnScrollListener
+import com.imaec.notificationhelper.ui.view.dialog.CommonDialog
+import com.imaec.notificationhelper.ui.view.dialog.DeleteDialog
 import com.imaec.notificationhelper.utils.Utils
 import com.imaec.notificationhelper.viewmodel.DetailViewModel
-import io.realm.Realm
 import java.util.*
-import kotlin.collections.ArrayList
 
 class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_detail) {
 
@@ -110,6 +110,20 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
             }
         }
 
+        detailViewModel.apply {
+            addOnLongClickListener { item ->
+                if (item is ContentRO) {
+                    DeleteDialog(this@DetailActivity)
+                        .setTitle(if (item.title.isNotEmpty()) item.title else getString(R.string.system))
+                        .setOnClickDelete {
+                            showDeleteInfo(item)
+                            it.dismiss()
+                        }
+                        .show()
+                }
+            }
+        }
+
         showProgress()
         showAd()
     }
@@ -126,14 +140,39 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
         }
     }
 
-    private fun getData() {
+    private fun getData(isRefresh: Boolean = false) {
         detailViewModel.getData(
             intent.getStringExtra(ExtraKey.EXTRA_PACKAGE_NAME)!!,
             Utils.getAppName(
                 this,
                 intent.getStringExtra(ExtraKey.EXTRA_PACKAGE_NAME)!!
             ),
-            intent.getStringExtra(ExtraKey.EXTRA_TITLE)
+            intent.getStringExtra(ExtraKey.EXTRA_TITLE),
+            isRefresh
         )
+    }
+
+    private fun showDeleteInfo(item: ContentRO) {
+        CommonDialog(this)
+            .setContent(getString(R.string.msg_delete_notification))
+            .setPositive(getString(R.string.delete)) {
+                detailViewModel.apply {
+                    delete(
+                        intent.getStringExtra(ExtraKey.EXTRA_PACKAGE_NAME)!!,
+                        item.title,
+                        item.pKey
+                    ) { isSuccess ->
+                        if (isSuccess)
+                            getData(true)
+                        else
+                            Toast.makeText(this@DetailActivity, R.string.msg_delete_fail, Toast.LENGTH_SHORT).show()
+                    }
+                }
+                it.dismiss()
+            }
+            .setNegative(getString(R.string.cancel)) {
+                it.dismiss()
+            }
+            .show()
     }
 }

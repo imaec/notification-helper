@@ -34,15 +34,19 @@ class DetailViewModel(
     private val _listContent = MutableLiveData<ArrayList<ContentRO>>(ArrayList())
     val listContent: LiveData<ArrayList<ContentRO>> get() = _listContent
 
-    fun getData(packageName: String, appName: String, title: String? = null) {
+    fun getData(packageName: String, appName: String, title: String? = null, isRefresh: Boolean = false) {
         _packageName.value = packageName
         _title.value = title ?: appName
         (adapter as DetailAdapter).setPackageName(packageName)
         _listContent.value?.let {
-            if (it.size == 0) {
+            if (it.size == 0 || isRefresh) {
                 _listContent.value = repository.getContents(packageName, title) as ArrayList<ContentRO>
                 _icon.value = listContent.value?.get(0)?.img
             }
         }
+    }
+
+    fun delete(packageName: String, groupName: String, notificationId: Long, callback: (Boolean) -> Unit) {
+        repository.delete(packageName, groupName, notificationId, callback)
     }
 }

@@ -29,5 +29,7 @@
     <string name="msg_cannot_ignore_system_alert">시스템 알림은 해당 기능을 사용할 수 없습니다.</string>
     <string name="msg_delete_all">"\"%1$s\" 앱의 모든 알림을 삭제하시겠습니까?</string>
     <string name="msg_delete_group">"\"%1$s\"의 모든 알림을 삭제하시겠습니까?</string>
+    <string name="msg_delete_notification">알림을 삭제하시겠습니까?</string>
+    <string name="msg_delete_fail">삭제에 실패 했습니다.</string>
     <string name="msg_ignore_info">알림리스트에서 \"%1$s\" 앱을\n다시 보시려면\n[설정]에서 \"%1$s\" 앱을\n체크 해제 해주세요.</string>
 </resources>

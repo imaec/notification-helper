@@ -23,8 +23,8 @@ class NotificationViewModel(
         _listNotification.value = repository.getNotifications() as ArrayList<Any>
     }
 
-    fun delete(packageName: String) {
-        repository.delete(packageName)
+    fun delete(packageName: String, callback: (Boolean) -> Unit) {
+        repository.delete(packageName, callback)
     }
 
     fun setIgnore(packageName: String) {

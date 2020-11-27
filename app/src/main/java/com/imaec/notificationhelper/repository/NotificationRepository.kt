@@ -1,12 +1,14 @@
 package com.imaec.notificationhelper.repository
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import com.imaec.notificationhelper.model.AppData
 import com.imaec.notificationhelper.model.ContentRO
 import com.imaec.notificationhelper.model.IgnoreRO
 import com.imaec.notificationhelper.model.NotificationRO
 import io.realm.Realm
+import io.realm.RealmList
 import io.realm.RealmResults
 import io.realm.Sort
 
@@ -54,12 +56,56 @@ class NotificationRepository(
         return if (listItem.size == 1) listItem else listItem.reversed()
     }
 
-    fun delete(packageName: String) {
+    // 알림 전체 삭제
+    fun delete(packageName: String, callback: (Boolean) -> Unit) {
+        val realmResults = realm.where(NotificationRO::class.java)
+            .equalTo("packageName", packageName)
+            .findAll()
         realm.executeTransaction {
-            realm.where(NotificationRO::class.java)
-                .equalTo("packageName", packageName)
-                .findAll()
-                .deleteAllFromRealm()
+            callback(realmResults.deleteAllFromRealm())
+        }
+    }
+
+    // 알림 그룹 삭제
+    fun delete(packageName: String, groupName: String, callback: (Boolean) -> Unit) {
+        realm.where(NotificationRO::class.java)
+            .equalTo("packageName", packageName)
+            .findFirst()?.let {
+                val listTemp = RealmList<ContentRO>()
+                it.contents.groupBy { content ->
+                    content.title
+                }.filter { group ->
+                    group.key == groupName
+                }[groupName]?.forEach { content ->
+                    listTemp.add(content)
+                }
+                realm.executeTransaction {
+                    callback(listTemp.deleteAllFromRealm())
+                }
+            }
+    }
+
+    // 개별 알림 삭제
+    fun delete(packageName: String, groupName: String, notificationId: Long, callback: (Boolean) -> Unit) {
+        val realmList = realm.where(NotificationRO::class.java)
+            .equalTo("packageName", packageName)
+            .findFirst()?.contents ?: return
+        realmList.addChangeListener { _, changeSet ->
+            callback(changeSet.isCompleteResult)
+        }
+
+        var position = -1
+        realmList.groupBy { content ->
+            content.title
+        }.filter { group ->
+            group.key == groupName
+        }[groupName]?.filter { content ->
+            content.pKey == notificationId
+        }?.forEach { content ->
+            position = realmList.indexOf(content)
+        }
+        realm.executeTransaction {
+            if (position > -1) realmList.deleteFromRealm(position)
         }
     }
 
