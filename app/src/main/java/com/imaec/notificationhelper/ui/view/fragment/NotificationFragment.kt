@@ -99,11 +99,11 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(R.layout.
         if (PreferencesUtil.getBool(context!!, PrefKey.PREF_NOT_SHOW_AGAIN)) return
 
         CommonDialog(context!!)
-            .setContent(String.format(context!!.getString(R.string.msg_ignore_info, appName)))
-            .setPositive(context!!.getString(R.string.ok)) {
+            .setContent(String.format(getString(R.string.msg_ignore_info, appName)))
+            .setPositive(getString(R.string.ok)) {
                 it.dismiss()
             }
-            .setNegative(context!!.getString(R.string.not_show_again)) {
+            .setNegative(getString(R.string.not_show_again)) {
                 PreferencesUtil.put(context!!, PrefKey.PREF_NOT_SHOW_AGAIN, true)
                 it.dismiss()
             }
@@ -112,12 +112,12 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(R.layout.
 
     private fun showDeleteInfo(item: NotificationRO) {
         CommonDialog(context!!)
-            .setContent(String.format(context!!.getString(R.string.msg_delete_all, item.appName)))
-            .setPositive(context!!.getString(R.string.delete)) {
+            .setContent(String.format(getString(R.string.msg_delete_all, item.appName)))
+            .setPositive(getString(R.string.delete)) {
                 notificationViewModel.delete(item.packageName)
                 it.dismiss()
             }
-            .setNegative(context!!.getString(R.string.cancel)) {
+            .setNegative(getString(R.string.cancel)) {
                 it.dismiss()
             }
             .show()

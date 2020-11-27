@@ -47,6 +47,10 @@ class GroupDetailAdapter : BaseAdapter() {
             itemView.setOnClickListener {
                 onClick(item)
             }
+            itemView.setOnLongClickListener {
+                onLongClick(item)
+                true
+            }
         }
     }
 }
