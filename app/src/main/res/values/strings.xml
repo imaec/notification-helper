@@ -1,6 +1,14 @@
 <resources>
     <string name="app_name">알림 모아보기</string>
 
+    <!-- Firebase Analytics Events & Key -->
+    <string name="event_screen_fragment">screen_fragment</string>
+    <string name="key_screen_fragment">fragment</string>
+
+    <!-- Firebase Crashlytics Events & Key -->
+    <string name="key_activity">activity</string>
+    <string name="key_fragment">fragment</string>
+
     <string name="notification">알림</string>
     <string name="search">검색</string>
     <string name="setting">설정</string>

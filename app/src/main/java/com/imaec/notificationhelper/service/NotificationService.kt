@@ -38,7 +38,7 @@ class NotificationHelperService : NotificationListenerService() {
         }
 
         val title = bundle.getCharSequence(Notification.EXTRA_TITLE)?.toString() ?: return
-        val content = bundle.getString(Notification.EXTRA_TEXT)
+        val content = bundle.getCharSequence(Notification.EXTRA_TEXT)?.toString() ?: return
         val largeIconBig = bundle.get(Notification.EXTRA_LARGE_ICON_BIG) as Bitmap?
         val largeIcon = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M)
             Utils.getBitmap(this, bundle.get(Notification.EXTRA_LARGE_ICON) as Icon?)
