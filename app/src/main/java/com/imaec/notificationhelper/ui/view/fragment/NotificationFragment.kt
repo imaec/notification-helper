@@ -17,7 +17,7 @@ import com.imaec.notificationhelper.model.NotificationRO
 import com.imaec.notificationhelper.repository.NotificationRepository
 import com.imaec.notificationhelper.ui.view.activity.DetailActivity
 import com.imaec.notificationhelper.ui.view.activity.GroupDetailActivity
-import com.imaec.notificationhelper.ui.view.dialog.IgnoreInfoDialog
+import com.imaec.notificationhelper.ui.view.dialog.CommonDialog
 import com.imaec.notificationhelper.ui.view.dialog.NotificationDialog
 import com.imaec.notificationhelper.utils.PreferencesUtil
 import com.imaec.notificationhelper.viewmodel.NotificationViewModel
@@ -71,6 +71,10 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(R.layout.
                             }
                             it.dismiss()
                         }
+                        .setOnClickDelete {
+                            showDeleteInfo(item)
+                            it.dismiss()
+                        }
                         .setOnClickIgnore {
                             if (item.appName.isEmpty()) {
                                 Toast.makeText(context, R.string.msg_cannot_ignore_system_alert, Toast.LENGTH_SHORT).show()
@@ -94,13 +98,26 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(R.layout.
     private fun showIgnoreInfo(appName: String) {
         if (PreferencesUtil.getBool(context!!, PrefKey.PREF_NOT_SHOW_AGAIN)) return
 
-        IgnoreInfoDialog(context!!)
+        CommonDialog(context!!)
             .setContent(String.format(context!!.getString(R.string.msg_ignore_info, appName)))
             .setPositive(context!!.getString(R.string.ok)) {
                 it.dismiss()
             }
             .setNegative(context!!.getString(R.string.not_show_again)) {
                 PreferencesUtil.put(context!!, PrefKey.PREF_NOT_SHOW_AGAIN, true)
+                it.dismiss()
+            }
+            .show()
+    }
+
+    private fun showDeleteInfo(item: NotificationRO) {
+        CommonDialog(context!!)
+            .setContent(String.format(context!!.getString(R.string.msg_delete_all, item.appName)))
+            .setPositive(context!!.getString(R.string.delete)) {
+                notificationViewModel.delete(item.packageName)
+                it.dismiss()
+            }
+            .setNegative(context!!.getString(R.string.cancel)) {
                 it.dismiss()
             }
             .show()

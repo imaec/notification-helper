@@ -3,6 +3,7 @@ package com.imaec.notificationhelper.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.imaec.notificationhelper.base.BaseViewModel
+import com.imaec.notificationhelper.model.NotificationRO
 import com.imaec.notificationhelper.repository.NotificationRepository
 import com.imaec.notificationhelper.ui.adapter.NotificationAdapter
 
@@ -20,6 +21,10 @@ class NotificationViewModel(
 
     fun getNotifications() {
         _listNotification.value = repository.getNotifications() as ArrayList<Any>
+    }
+
+    fun delete(packageName: String) {
+        repository.delete(packageName)
     }
 
     fun setIgnore(packageName: String) {

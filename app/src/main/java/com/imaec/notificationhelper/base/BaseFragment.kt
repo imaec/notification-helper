@@ -14,6 +14,7 @@ import com.google.android.gms.ads.MobileAds
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
 import com.imaec.notificationhelper.R
 import com.imaec.notificationhelper.ui.view.dialog.ProgressDialog
@@ -81,5 +82,6 @@ abstract class BaseFragment<T : ViewDataBinding>(@LayoutRes private val layoutRe
     private fun init() {
         MobileAds.initialize(context) {}
         firebaseAnalytics = Firebase.analytics
+        firebaseCrashlytics = Firebase.crashlytics
     }
 }

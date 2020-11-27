@@ -14,6 +14,7 @@ class NotificationDialog(context: Context) : BaseDialog<DialogNotificationBindin
 
     private var title: String? = null
     private var onClickOpen: ((NotificationDialog) -> Unit)? = null
+    private var onClickDelete: ((NotificationDialog) -> Unit)? = null
     private var onClickIgnore: ((NotificationDialog) -> Unit)? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +38,11 @@ class NotificationDialog(context: Context) : BaseDialog<DialogNotificationBindin
                     it(this@NotificationDialog)
                 } ?: dismiss()
             }
+            textDelete.setOnClickListener {
+                onClickDelete?.let {
+                    it(this@NotificationDialog)
+                } ?: dismiss()
+            }
             textIgnore.setOnClickListener {
                 onClickIgnore?.let {
                     it(this@NotificationDialog)
@@ -52,6 +58,11 @@ class NotificationDialog(context: Context) : BaseDialog<DialogNotificationBindin
 
     fun setOnClickOpen(onClickOpen: (NotificationDialog) -> Unit): NotificationDialog {
         this.onClickOpen = onClickOpen
+        return this
+    }
+
+    fun setOnClickDelete(onClickDelete: (NotificationDialog) -> Unit): NotificationDialog {
+        this.onClickDelete = onClickDelete
         return this
     }
 

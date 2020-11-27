@@ -8,9 +8,9 @@ import android.os.Bundle
 import android.view.WindowManager
 import com.imaec.notificationhelper.R
 import com.imaec.notificationhelper.base.BaseDialog
-import com.imaec.notificationhelper.databinding.DialogIgnoreInfoBinding
+import com.imaec.notificationhelper.databinding.DialogCommonBinding
 
-class IgnoreInfoDialog(context: Context) : BaseDialog<DialogIgnoreInfoBinding>(context, R.layout.dialog_ignore_info) {
+class CommonDialog(context: Context) : BaseDialog<DialogCommonBinding>(context, R.layout.dialog_common) {
 
     constructor(context: Context, content: String, positive: String = "", negative: String = "") : this(context) {
         this.content = content
@@ -21,8 +21,8 @@ class IgnoreInfoDialog(context: Context) : BaseDialog<DialogIgnoreInfoBinding>(c
     private var content: String? = null
     private var positive: String? = null
     private var negative: String? = null
-    private var onClickOk: ((IgnoreInfoDialog) -> Unit)? = null
-    private var onClickCancel: ((IgnoreInfoDialog) -> Unit)? = null
+    private var onClickOk: ((CommonDialog) -> Unit)? = null
+    private var onClickCancel: ((CommonDialog) -> Unit)? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,30 +43,30 @@ class IgnoreInfoDialog(context: Context) : BaseDialog<DialogIgnoreInfoBinding>(c
             textOk.text = positive ?: textOk.text
             textOk.setOnClickListener {
                 onClickOk?.let {
-                    it(this@IgnoreInfoDialog)
+                    it(this@CommonDialog)
                 } ?: dismiss()
             }
             textCancel.text = negative ?: textCancel.text
             textCancel.setOnClickListener {
                 onClickCancel?.let {
-                    it(this@IgnoreInfoDialog)
+                    it(this@CommonDialog)
                 } ?: dismiss()
             }
         }
     }
 
-    fun setContent(content: String): IgnoreInfoDialog {
+    fun setContent(content: String): CommonDialog {
         this.content = content
         return this
     }
 
-    fun setPositive(positive: String, onClickOk: (IgnoreInfoDialog) -> Unit): IgnoreInfoDialog {
+    fun setPositive(positive: String, onClickOk: (CommonDialog) -> Unit): CommonDialog {
         this.positive = positive
         this.onClickOk = onClickOk
         return this
     }
 
-    fun setNegative(negative: String, onClickCancel: (IgnoreInfoDialog) -> Unit): IgnoreInfoDialog {
+    fun setNegative(negative: String, onClickCancel: (CommonDialog) -> Unit): CommonDialog {
         this.negative = negative
         this.onClickCancel = onClickCancel
         return this

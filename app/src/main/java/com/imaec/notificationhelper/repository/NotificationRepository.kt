@@ -54,6 +54,15 @@ class NotificationRepository(
         return if (listItem.size == 1) listItem else listItem.reversed()
     }
 
+    fun delete(packageName: String) {
+        realm.executeTransaction {
+            realm.where(NotificationRO::class.java)
+                .equalTo("packageName", packageName)
+                .findAll()
+                .deleteAllFromRealm()
+        }
+    }
+
     fun search(method: String, keyword: String): List<Any> {
         val realmResult = if (method == "name") {
             realm.where(NotificationRO::class.java)

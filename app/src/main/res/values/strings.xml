@@ -18,6 +18,8 @@
     <string name="cancel">취소</string>
     <string name="system">System</string>
     <string name="app_open">앱 열기</string>
+    <string name="delete">삭제</string>
+    <string name="delete_notification">알림 삭제</string>
     <string name="ignore">알림 표시하지 않기</string>
     <string name="not_show_again">다시 보지 않기</string>
     <string name="test">${info} asdf</string>
@@ -25,5 +27,7 @@
     <string name="msg_access_notification">알림리스트를 사용하시려면\n\'알림 접근 권한\'을 \'허용\'하셔야 합니다.\n\'%1$s\'의 알림 접근을 허용해주세요.</string>
     <string name="msg_empty_notification">저장된 알림이 없습니다.</string>
     <string name="msg_cannot_ignore_system_alert">시스템 알림은 해당 기능을 사용할 수 없습니다.</string>
-    <string name="msg_ignore_info">"알림리스트에서 \"%1$s\" 앱을\n다시 보시려면\n[설정]에서 \"%1$s\" 앱을\n체크 해제 해주세요."</string>
+    <string name="msg_delete_all">"\"%1$s\" 앱의 모든 알림을 삭제하시겠습니까?</string>
+    <string name="msg_delete_group">"\"%1$s\"의 모든 알림을 삭제하시겠습니까?</string>
+    <string name="msg_ignore_info">알림리스트에서 \"%1$s\" 앱을\n다시 보시려면\n[설정]에서 \"%1$s\" 앱을\n체크 해제 해주세요.</string>
 </resources>
