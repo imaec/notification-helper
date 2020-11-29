@@ -21,6 +21,7 @@ import com.imaec.notificationhelper.model.ContentRO
 import com.imaec.notificationhelper.repository.NotificationRepository
 import com.imaec.notificationhelper.ui.callback.EndlessRecyclerOnScrollListener
 import com.imaec.notificationhelper.ui.view.dialog.CommonDialog
+import com.imaec.notificationhelper.ui.view.dialog.ContentDialog
 import com.imaec.notificationhelper.ui.view.dialog.DeleteDialog
 import com.imaec.notificationhelper.utils.Utils
 import com.imaec.notificationhelper.viewmodel.DetailViewModel
@@ -87,15 +88,13 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
                         putExtra("img", item.img2)
                     })
                 } else {
-                    android.app.AlertDialog.Builder(binding.root.context).apply {
-                        setTitle(item.title)
-                        setMessage(item.content)
-                        setPositiveButton("확인") { dialog, which ->
-                            dialog.dismiss()
+                    ContentDialog(this)
+                        .setTitle(item.title)
+                        .setContent(item.content)
+                        .setPositive(getString(R.string.ok)) {
+                            it.dismiss()
                         }
-                        create()
-                        show()
-                    }
+                        .show()
                 }
             }
         }

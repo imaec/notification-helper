@@ -13,6 +13,8 @@ abstract class BaseDialog<T : ViewDataBinding>(
     @LayoutRes private val layoutResId: Int
 ) : Dialog(context) {
 
+    protected var TAG = this::class.java.simpleName
+
     protected lateinit var binding: T
 
     override fun onCreate(savedInstanceState: Bundle?) {

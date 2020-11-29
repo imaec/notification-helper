@@ -91,5 +91,10 @@ class Utils {
             drawable.draw(canvas)
             return bitmap
         }
+
+        fun dp(context: Context, dpValue: Int): Int {
+            val d = context.resources.displayMetrics.density
+            return (dpValue * d).toInt()
+        }
     }
 }
