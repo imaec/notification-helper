@@ -12,29 +12,27 @@ android {
         applicationId "com.imaec.notificationhelper"
         minSdkVersion 22
         targetSdkVersion 29
-        versionCode 102
-        versionName "1.0.2"
+        versionCode 103
+        versionName "1.0.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
     buildTypes {
-        buildTypes {
-            debug {
-                resValue "string", "admob_app_id", "ca-app-pub-3940256099942544~3347511713"
-                resValue "string", "ad_id_splash_front", "ca-app-pub-3940256099942544/1033173712"
-                resValue "string", "ad_id_detail_front", "ca-app-pub-3940256099942544/1033173712"
-                resValue "string", "ad_id_main_banner", "ca-app-pub-3940256099942544/6300978111"
-                resValue "string", "ad_id_detail_banner", "ca-app-pub-3940256099942544/6300978111"
-            }
-            release {
-                resValue "string", "admob_app_id", "ca-app-pub-7147836151485354~4113069821"
-                resValue "string", "ad_id_splash_front", "ca-app-pub-7147836151485354/1446899106"
-                resValue "string", "ad_id_detail_front", "ca-app-pub-7147836151485354/3729926444"
-                resValue "string", "ad_id_main_banner", "ca-app-pub-7147836151485354/6044619660"
-                resValue "string", "ad_id_detail_banner", "ca-app-pub-7147836151485354/6356089784"
-                minifyEnabled false
-                proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            }
+        debug {
+            resValue "string", "admob_app_id", "ca-app-pub-3940256099942544~3347511713"
+            resValue "string", "ad_id_splash_front", "ca-app-pub-3940256099942544/1033173712"
+            resValue "string", "ad_id_detail_front", "ca-app-pub-3940256099942544/1033173712"
+            resValue "string", "ad_id_main_banner", "ca-app-pub-3940256099942544/6300978111"
+            resValue "string", "ad_id_detail_banner", "ca-app-pub-3940256099942544/6300978111"
+        }
+        release {
+            resValue "string", "admob_app_id", "ca-app-pub-7147836151485354~4113069821"
+            resValue "string", "ad_id_splash_front", "ca-app-pub-7147836151485354/1446899106"
+            resValue "string", "ad_id_detail_front", "ca-app-pub-7147836151485354/3729926444"
+            resValue "string", "ad_id_main_banner", "ca-app-pub-7147836151485354/6044619660"
+            resValue "string", "ad_id_detail_banner", "ca-app-pub-7147836151485354/6356089784"
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
